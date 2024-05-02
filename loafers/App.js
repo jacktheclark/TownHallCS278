@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
-import Home from './pages/Home';
+import Landing from './pages/Landing';
+import Feed from './pages/Feed';
 import { COLORS, FONTS, FONT_SOURCE_BODY, FONT_SOURCE_MEDIUM, FONT_SOURCE_BOLD } from "./constants";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -13,10 +18,13 @@ export default function App() {
   });
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      {fontsLoaded ? <Home /> : null}
-    </View>
+    <NavigationContainer style={styles.container}>
+      <Stack.Navigator initialRouteName="LandingScreen">
+        <Stack.Screen name="LandingScreen" component={Landing}/>
+        <Stack.Screen name="FeedScreen" component={Feed} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    
   );
 }
 

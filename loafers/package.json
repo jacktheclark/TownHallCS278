@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo/config": "^8.1.1",
     "@expo/metro-config": "^0.10.0",
+    "@react-navigation/native-stack": "^6.9.26",
     "expo": "~50.0.17",
     "expo-status-bar": "~1.11.1",
     "nativewind": "^2.0.11",
