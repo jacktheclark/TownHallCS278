@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { COLORS, FONTS } from "../constants.js";
 import CommentsFeed from "../components/CommentsFeed.js";
 
@@ -18,6 +18,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: COLORS.dark,
+    //borderColor: "red",
+    //borderWidth: 5,
   },
   testText: {
     marginTop: 100,
