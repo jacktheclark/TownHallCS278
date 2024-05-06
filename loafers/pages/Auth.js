@@ -26,60 +26,7 @@ const Auth = ({ navigation, route }) => {
       if (error) {
         setError(error.message);
       } else {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        console.log(user.id);
-
-        if (user) {
-          // Check if the user exists in the "UserInfo" table
-          const { data: existingUserInfo, error: existingUserInfoError } =
-            await supabase.from("UserInfo").select("*").eq("userid", user.id);
-
-          if (existingUserInfoError) {
-            console.error(
-              "Error fetching UserInfo:",
-              existingUserInfoError.message
-            );
-          } else {
-            if (existingUserInfo.length === 0) {
-              // If the user doesn't exist, insert a new row for the user
-              const { data: newUserRow, error: newUserRowError } =
-                await supabase
-                  .from("UserInfo")
-                  .insert({ userid: user.id, pseudo: displayName });
-
-              if (newUserRowError) {
-                console.error(
-                  "Error inserting new user row:",
-                  newUserRowError.message
-                );
-              } else {
-                console.log("New user row inserted successfully:", newUserRow);
-              }
-            } else {
-              // If the user already exists, update the existing row
-              const { data: updatedUserInfo, error: updateUserInfoError } =
-                await supabase
-                  .from("UserInfo")
-                  .update({ pseudo: displayName })
-                  .eq("userid", user.id);
-
-              if (updateUserInfoError) {
-                console.error(
-                  "Error updating UserInfo:",
-                  updateUserInfoError.message
-                );
-              } else {
-                console.log("UserInfo updated successfully:", updatedUserInfo);
-              }
-            }
-          }
-        } else {
-          console.error("User not found.");
-        }
-
-        navigation.navigate("FeedScreen");
+        navigation.navigate("FeedScreen", { displayName });
         console.log("Logged in");
       }
     } catch (error) {
@@ -150,7 +97,7 @@ const Auth = ({ navigation, route }) => {
       </Pressable>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("SignupScreen", { displayName })}
+        //onPress={() => navigation.navigate("SignupScreen", { displayName })}
         style={{
           width: 300,
           height: 50,

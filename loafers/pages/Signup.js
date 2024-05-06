@@ -23,30 +23,7 @@ const Signup = ({ navigation, route }) => {
       if (error) {
         setError(error.message);
       } else {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        console.log(user.id);
-
-        if (user) {
-          // Insert a new row for the user
-          const { data: newUserRow, error: newUserRowError } = await supabase
-            .from("UserInfo")
-            .insert([{ userid: user.id, pseudo: displayName }]);
-
-          if (newUserRowError) {
-            console.error(
-              "Error inserting new user row:",
-              newUserRowError.message
-            );
-          } else {
-            console.log("New user row inserted successfully:", newUserRow);
-          }
-        } else {
-          console.error("User not found.");
-        }
-
-        navigation.navigate("FeedScreen");
+        navigation.navigate("FeedScreen", { displayName });
         console.log("Signed up");
       }
     } catch (error) {
