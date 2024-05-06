@@ -3,9 +3,12 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { COLORS, FONTS } from "../constants.js";
 import CommentsFeed from "../components/CommentsFeed.js";
 import DiscussionTopic from "../components/DiscussionTopic.js";
+import SliderComponent from "../components/SliderComponent.js";
+import WriteComment from "../components/WriteComment.js";
 import supabase from "../Supabase.js";
 
 export default function Feed({ navigation, route }) {
+  const [hasCommented, showComments] = useState(false);
   const { displayName } = route.params;
   console.log("Display Name (feed):", displayName);
   useEffect(() => {
@@ -75,7 +78,15 @@ export default function Feed({ navigation, route }) {
     <View style={styles.container}>
       {/* <Text style={styles.testText}>feed screen</Text> */}
       <DiscussionTopic question={"insert controversial question here"}/>
-      <CommentsFeed />
+      <SliderComponent />
+      {hasCommented ? (
+        <CommentsFeed/>
+        
+      ) : (
+        <WriteComment 
+        hasCommented={hasCommented} 
+        showComments={showComments}/>
+      )}
     </View>
   );
 }
