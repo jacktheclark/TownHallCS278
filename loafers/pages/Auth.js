@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   Button,
+  StyleSheet,
   TouchableOpacity,
   Pressable,
 } from "react-native";
@@ -35,46 +36,21 @@ const Auth = ({ navigation, route }) => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "start",
-        alignItems: "center",
-        backgroundColor: COLORS.dark,
-      }}
-    >
+    <View style={styles.container}>
       <View
         style={{
           height: 50,
         }}
       ></View>
       <TextInput
-        style={{
-          height: 40,
-          width: 300,
-          borderColor: COLORS.lightaccent,
-          borderWidth: 1,
-          marginBottom: 20,
-          paddingHorizontal: 10,
-          borderRadius: 10,
-          color: COLORS.lightaccent,
-        }}
+        style={styles.input}
         onChangeText={(text) => setEmail(text)}
         value={xemail}
         placeholder="Email"
         autoCapitalize="none"
       />
       <TextInput
-        style={{
-          height: 40,
-          width: 300,
-          borderColor: COLORS.lightaccent,
-          borderWidth: 1,
-          marginBottom: 20,
-          paddingHorizontal: 10,
-          borderRadius: 10,
-          color: COLORS.lightaccent,
-        }}
+        style={styles.input}
         onChangeText={(text) => setPassword(text)}
         value={xpassword}
         placeholder="Password"
@@ -83,37 +59,17 @@ const Auth = ({ navigation, route }) => {
       {error && <Text style={{ color: "red" }}>{error}</Text>}
       <Pressable
         onPress={signInWithEmail}
-        style={{
-          width: 300,
-          height: 40,
-          backgroundColor: COLORS.lightaccent,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 10,
-        }}
+        style={styles.loginButton}
       >
-        <Text style={{ color: COLORS.dark, fontSize: 25 }}>Log In</Text>
+        <Text style={styles.loginButtonText}>Log In</Text>
       </Pressable>
 
       <TouchableOpacity
         //onPress={() => navigation.navigate("SignupScreen", { displayName })}
-        style={{
-          width: 300,
-          height: 50,
-          backgroundColor: COLORS.dark,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 10,
-        }}
+        style={styles.suButton}
       >
         <Text
-          style={{
-            color: "gray",
-            fontSize: 18,
-            textDecorationLine: "underline",
-          }}
+          style={styles.suButtonText}
         >
           Sign Up
         </Text>
@@ -130,5 +86,41 @@ const Auth = ({ navigation, route }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.dark,
+  },
+  input: {
+    height: 40,
+    width: 300,
+    borderColor: COLORS.lightaccent,
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    color: COLORS.lightaccent,
+  },
+  loginButton: {
+    backgroundColor: COLORS.lightaccent,
+    borderRadius: 25,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginBottom: 20,
+  },
+  loginButtonText: {
+    color: COLORS.dark,
+    textAlign: "center",
+  },
+  suButtonText: {
+    color: COLORS.lightaccent,
+    fontFamily: FONTS.body,
+    textAlign: "center",
+  }
+
+});  
 
 export default Auth;

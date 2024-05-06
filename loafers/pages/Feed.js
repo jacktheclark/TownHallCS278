@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { COLORS, FONTS } from "../constants.js";
 import CommentsFeed from "../components/CommentsFeed.js";
+import DiscussionTopic from "../components/DiscussionTopic.js";
 import supabase from "../Supabase.js";
 
 export default function Feed({ navigation, route }) {
@@ -11,8 +12,6 @@ export default function Feed({ navigation, route }) {
     async function updateUserInfo() {
       try {
         const { data: user } = await supabase.auth.getUser();
-        //console.log("User ID (feed)", user.user.id);
-        //console.log("User(feed)", data);
 
         if (user) {
           // Check if the user exists in the "UserInfo" table
@@ -75,6 +74,7 @@ export default function Feed({ navigation, route }) {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.testText}>feed screen</Text> */}
+      <DiscussionTopic question={"insert controversial question here"}/>
       <CommentsFeed />
     </View>
   );
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     color: "white",
     fontSize: 24,
-    fontFamily: FONTS.bold,
+    fontFamily: FONTS.body,
     color: COLORS.lightaccent,
   },
 });

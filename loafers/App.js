@@ -61,7 +61,7 @@ export default function App() {
           name="FeedScreen"
           component={Feed}
           options={{
-            title: "Feed Screen",
+            title: "Question of the Day",
             headerStyle: {
               backgroundColor: "#000000",
             },
@@ -69,6 +69,8 @@ export default function App() {
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            fontFamily: FONTS.bold,
+            
           }}
         />
         <Stack.Screen
