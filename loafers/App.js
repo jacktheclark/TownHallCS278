@@ -4,6 +4,9 @@ import { Text, View, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import Landing from "./pages/Landing";
 import Feed from "./pages/Feed";
+import Auth from "./pages/Auth";
+import Signup from "./pages/Signup";
+
 import {
   COLORS,
   FONTS,
@@ -27,6 +30,20 @@ export default function App() {
     <NavigationContainer style={styles.container}>
       <Stack.Navigator initialRouteName="LandingScreen">
         <Stack.Screen
+          name="AuthScreen"
+          component={Auth}
+          options={{
+            title: "",
+            headerStyle: {
+              backgroundColor: "#000000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
           name="LandingScreen"
           component={Landing}
           options={{
@@ -45,6 +62,20 @@ export default function App() {
           component={Feed}
           options={{
             title: "Feed Screen",
+            headerStyle: {
+              backgroundColor: "#000000",
+            },
+            headerTintColor: COLORS.lightaccent,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="SignupScreen"
+          component={Signup}
+          options={{
+            title: "",
             headerStyle: {
               backgroundColor: "#000000",
             },
