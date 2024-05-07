@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  SafeAreaView,
   View,
   Text,
   TextInput,
@@ -36,7 +37,10 @@ const Auth = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Text style={{ color: COLORS.lightaccent, fontFamily: FONTS.header }}>
+        Login {displayName}!
+      </Text>
       <View
         style={{
           height: 50,
@@ -83,7 +87,7 @@ const Auth = ({ navigation, route }) => {
           Sign Up
         </Text>
       </TouchableOpacity> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -92,7 +96,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.dark,
+    backgroundColor: COLORS.background_dark,
+    borderRadius: 20,
   },
   input: {
     height: 40,

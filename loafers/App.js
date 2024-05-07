@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { PaperProvider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import { Text, View, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
@@ -35,7 +36,7 @@ export default function App() {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: "#000000",
+              backgroundColor: COLORS.white,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -49,7 +50,7 @@ export default function App() {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: "#000000",
+              backgroundColor: COLORS.white,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -63,7 +64,7 @@ export default function App() {
           options={{
             title: "Question of the Day",
             headerStyle: {
-              backgroundColor: "#000000",
+              backgroundColor: COLORS.white,
             },
             headerTintColor: COLORS.lightaccent,
             headerTitleStyle: {
@@ -79,7 +80,7 @@ export default function App() {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: "#000000",
+              backgroundColor: COLORS.white,
             },
             headerTintColor: COLORS.lightaccent,
             headerTitleStyle: {
