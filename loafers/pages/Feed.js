@@ -11,10 +11,8 @@ export default function Feed({ navigation, route }) {
   const { displayName } = route.params;
   const [hasCommented, showComments] = useState(false);
   useEffect(() => {
-    // Log/display the displayName
+    // Display pseudo
     console.log("Display Name:", displayName);
-    // Or render it in the component
-    // setDisplayName(displayName);
   }, []);
 
   return (

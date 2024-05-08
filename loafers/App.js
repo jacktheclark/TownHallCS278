@@ -70,6 +70,7 @@ export default function App() {
               fontWeight: "bold",
             },
             fontFamily: FONTS.bold,
+            headerBackVisible: false,
           }}
         />
         <Stack.Screen

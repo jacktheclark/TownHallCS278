@@ -65,6 +65,7 @@ const Auth = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.instructionsText}>Welcome to TownHall</Text>
       <View
         style={{
           height: 50,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "start",
     backgroundColor: COLORS.dark,
   },
   input: {
@@ -140,6 +141,14 @@ const styles = StyleSheet.create({
     color: COLORS.lightaccent,
     fontFamily: FONTS.body,
     textAlign: "center",
+  },
+  instructionsText: {
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 20,
+    fontFamily: FONTS.bold,
+    color: COLORS.lightaccent,
+    marginTop: 60, // Move the instructions towards the top
   },
 });
 
