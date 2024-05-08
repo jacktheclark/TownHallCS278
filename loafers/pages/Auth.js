@@ -13,10 +13,37 @@ import { COLORS, FONTS } from "../constants.js";
 import { colorsDark } from "react-native-elements/dist/config/index.js";
 
 const Auth = ({ navigation, route }) => {
-  const { displayName } = route.params;
   const [xemail, setEmail] = useState("");
   const [xpassword, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [displayName, setDisplayName] = useState("");
+
+  async function updateUserInfo() {
+    try {
+      const { data: user, error } = await supabase.auth.getUser();
+      console.log("UserID(auth)", user.user.id);
+      if (error) {
+        throw error;
+      }
+
+      const { data: userData, error: userError } = await supabase
+        .from("UserInfo")
+        .select("pseudo")
+        .eq("userid", user.user.id)
+        .single();
+
+      if (userError) {
+        throw userError;
+      }
+
+      if (userData) {
+        setDisplayName(userData.pseudo);
+        console.log(userData.pseudo);
+      }
+    } catch (error) {
+      console.error("Error updating user info:", error.message);
+    }
+  }
 
   async function signInWithEmail() {
     try {
@@ -27,6 +54,7 @@ const Auth = ({ navigation, route }) => {
       if (error) {
         setError(error.message);
       } else {
+        await updateUserInfo();
         navigation.navigate("FeedScreen", { displayName });
         console.log("Logged in");
       }
@@ -62,7 +90,7 @@ const Auth = ({ navigation, route }) => {
       </Pressable>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("SignupScreen", { displayName })}
+        onPress={() => navigation.navigate("LandingScreen")}
         style={styles.suButton}
       >
         <Text style={styles.suButtonText}>Sign Up</Text>

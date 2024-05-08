@@ -16,8 +16,8 @@ export default function Landing({ navigation }) {
   };
 
   const handlePressLogin = () => {
-    navigation.navigate("AuthScreen", { displayName });
-    console.log("Logging in with username:", displayName);
+    navigation.navigate("SignupScreen", { displayName });
+    console.log("Pseudo chosen, proceeding to sign up with", displayName);
   };
 
   return (
@@ -35,7 +35,7 @@ export default function Landing({ navigation }) {
         </View>
       </View>
       <TouchableOpacity style={styles.loginButton} onPress={handlePressLogin}>
-        <Text style={styles.loginButtonText}>Continue to Discussion</Text>
+        <Text style={styles.loginButtonText}>Continue to Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
