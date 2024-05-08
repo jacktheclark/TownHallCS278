@@ -57,22 +57,15 @@ const Auth = ({ navigation, route }) => {
         secureTextEntry
       />
       {error && <Text style={{ color: "red" }}>{error}</Text>}
-      <Pressable
-        onPress={signInWithEmail}
-        style={styles.loginButton}
-      >
+      <Pressable onPress={signInWithEmail} style={styles.loginButton}>
         <Text style={styles.loginButtonText}>Log In</Text>
       </Pressable>
 
       <TouchableOpacity
-        //onPress={() => navigation.navigate("SignupScreen", { displayName })}
+        onPress={() => navigation.navigate("SignupScreen", { displayName })}
         style={styles.suButton}
       >
-        <Text
-          style={styles.suButtonText}
-        >
-          Sign Up
-        </Text>
+        <Text style={styles.suButtonText}>Sign Up</Text>
       </TouchableOpacity>
       {/*  
       <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")}>
@@ -119,8 +112,7 @@ const styles = StyleSheet.create({
     color: COLORS.lightaccent,
     fontFamily: FONTS.body,
     textAlign: "center",
-  }
-
-});  
+  },
+});
 
 export default Auth;
