@@ -20,7 +20,7 @@ export default function Feed({ navigation, route }) {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.testText}>feed screen</Text> */}
-      <DiscussionTopic question={"insert controversial question here"} />
+      <DiscussionTopic question={"What do you think of the new Stanford president hiring?"} />
       <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
         specColor={specColor} setSpecColor={setSpecColor}/>
       {hasCommented ? (
