@@ -6,7 +6,7 @@ const supabaseUrl = "https://xovmexpzicgponxaqajs.supabase.co";
 const supabaseAnonKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhvdm1leHB6aWNncG9ueGFxYWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ1OTAwMjcsImV4cCI6MjAzMDE2NjAyN30.4OJF6tuQuKOD799usnyTSWgFvvI2pPeqieUWMLGxS_0";
 
-export default supabase = createClient(supabaseUrl, supabaseAnonKey, {
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: AsyncStorage,
     autoRefreshToken: true,
@@ -14,3 +14,19 @@ export default supabase = createClient(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: false,
   },
 });
+
+const postComment = async (comment) => {
+  try {
+    const { data, error } = await supabase.from('Comments').insert([comment]);
+    if (error) {
+      console.error('Error posting comment:', error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.error('Error posting comment:', error.message);
+    return null;
+  }
+};
+
+export { supabase, postComment };

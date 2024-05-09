@@ -10,20 +10,28 @@ import supabase from "../Supabase.js";
 export default function Feed({ navigation, route }) {
   const { displayName } = route.params;
   const [hasCommented, showComments] = useState(false);
+  const [spectrumValue, setSpectrumValue] = useState(5);
+  const [specColor, setSpecColor] = useState(null);
   useEffect(() => {
     // Display pseudo
-    console.log("Display Name:", displayName);
+    // console.error("Display Name:", route.params);
   }, []);
 
   return (
     <View style={styles.container}>
       {/* <Text style={styles.testText}>feed screen</Text> */}
       <DiscussionTopic question={"insert controversial question here"} />
-      <SliderComponent />
+      <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
+        specColor={specColor} setSpecColor={setSpecColor}/>
       {hasCommented ? (
-        <CommentsFeed />
+        <CommentsFeed specColor={specColor} setSpecColor={setSpecColor}/>
       ) : (
-        <WriteComment hasCommented={hasCommented} showComments={showComments} />
+        <WriteComment 
+        displayName = {displayName}
+        spectrumValue={spectrumValue} 
+        setSpectrumValue={setSpectrumValue}
+        hasCommented={hasCommented} 
+        showComments={showComments} />
       )}
     </View>
   );
@@ -32,7 +40,7 @@ export default function Feed({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "center",
     backgroundColor: COLORS.dark,
     //borderColor: "red",
