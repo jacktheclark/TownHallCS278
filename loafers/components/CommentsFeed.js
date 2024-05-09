@@ -7,38 +7,31 @@ import { supabase, postComment } from "../Supabase.js";
 const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [testComments, setTestComments] = useState(null);
-  
 
   useEffect(() => {
-    const fetch = async () => {
-      const { data, error } = await supabase.from("Comments").select();
-
-      if (error) {
+    const fetchComments = async () => {
+      try {
+        const { data, error } = await supabase.from("Comments").select();
+        if (error) {
+          throw error;
+        }
+        if (data) {
+          setTestComments(data.reverse()); // Reverse (most recent first)
+        }
+      } catch (error) {
         setFetchError("Could not fetch");
         console.log(error);
       }
-      if (data) {
-        setTestComments(data);
-        console.log(data);
-        setFetchError(null);
-      }
     };
-    fetch();
-  }, []);
 
-  //will eventually import the comments
-  //const testComments = [
-  //  { spectrum: 8.3, id: 1, author: 'ZestyPenguin', content: 'my name is jef' },
-  //{ spectrum: 1.2, id: 2, author: 'FerociousCapybara', content: 'my brother in christ u made da sandwich' },
-  // { spectrum: 4.2, id: 3, author: 'TingusPingus', content: 'yo yo yo its ya boi' },
-  // { spectrum: 6.5, id: 4, author: 'MalevolentAardvark', content: 'Why cant we talk about the political and economic state of the world rn?' },
-  //];
+    fetchComments(); // Call the fetchComments function once
+  }, []); // Empty dependency array ensures the effect runs only once
 
   return (
     <View style={styles.container}>
       <FlatList
         style={styles.flatList}
-        data={testComments}
+        data={testComments || []} // Use testComments or an empty array if testComments is null
         renderItem={({ item }) => (
           <Comment
             spec={item.spectrum}

@@ -4,13 +4,18 @@ import { COLORS, FONTS } from "../constants.js";
 
 const IndividualComment = ({ spec, author, content, specColor, setSpecColor }) => {
 
-    const colorScale = [
-        { low: 0, high: 2, color: '#f00f63' }, //pink
-        { low: 2, high: 4, color: '#c319e6' }, //purple
-        { low: 4, high: 6, color: '#170af5' }, // blue
-        { low: 6, high: 8, color: '#1ad8e5' }, //cyan
-        { low: 8, high: 10, color: '#19e64b' }, //green
-    ];
+  const colorScale = [
+    { low: 0, high: 1, color: '#f00f63' }, //pink
+    { low: 1, high: 2, color: '#f20d82' }, //pink/purple
+    { low: 2, high: 3, color: '#b813ec' }, //purple/blue
+    { low: 3, high: 4, color: '#551ee1' }, //bluer
+    { low: 4, high: 5, color: '#2052df' }, //light blue
+    { low: 5, high: 6, color: '#1cc8e3' }, //cyan
+    { low: 6, high: 7, color: '#22dd95' }, //mint
+    { low: 7, high: 8, color: '#e5f708' }, //yellow
+    { low: 8, high: 9, color: '#ff9200' }, //orange
+    { low: 9, high: 10, color: '#f94106' }, //red/orange
+];
 
     const addHexNum = (col, offset) => {
         const decColor = parseInt(col, 16);
