@@ -29,7 +29,7 @@ export default function App() {
 
   return (
     <NavigationContainer style={styles.container}>
-      <Stack.Navigator initialRouteName="LandingScreen">
+      <Stack.Navigator initialRouteName="AuthScreen">
         <Stack.Screen
           name="AuthScreen"
           component={Auth}
@@ -71,7 +71,7 @@ export default function App() {
               fontWeight: "bold",
             },
             fontFamily: FONTS.bold,
-            
+            headerBackVisible: false,
           }}
         />
         <Stack.Screen

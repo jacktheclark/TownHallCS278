@@ -16,13 +16,13 @@ export default function Landing({ navigation }) {
   };
 
   const handlePressLogin = () => {
-    navigation.navigate("AuthScreen", { displayName });
-    console.log("Logging in with username:", displayName);
+    navigation.navigate("SignupScreen", { displayName });
+    console.log("Pseudo chosen, proceeding to sign up with", displayName);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}>Welcome to TownHall</Text>
+      {/*<Text style={styles.instructionsText}>Welcome to TownHall</Text>*/}
       <Text style={styles.subtitleText}>
         Please choose a pseudonym to continue
       </Text>
@@ -35,7 +35,7 @@ export default function Landing({ navigation }) {
         </View>
       </View>
       <TouchableOpacity style={styles.loginButton} onPress={handlePressLogin}>
-        <Text style={styles.loginButtonText}>Continue to Discussion</Text>
+        <Text style={styles.loginButtonText}>Continue to Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.medium,
     color: COLORS.lightaccent,
-    marginTop: 20, // Move the instructions towards the top
+    marginTop: 70, // Move the instructions towards the top
   },
   row: {
     flexDirection: "row",
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 15,
     paddingHorizontal: 30,
-    marginBottom: 20,
+    marginBottom: 100,
   },
   loginButtonText: {
     color: COLORS.dark,
