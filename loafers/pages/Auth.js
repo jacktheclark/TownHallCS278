@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import supabase from "../Supabase.js";
+import { supabase, postComment } from "../Supabase.js";
 import { COLORS, FONTS } from "../constants.js";
 import { colorsDark } from "react-native-elements/dist/config/index.js";
 

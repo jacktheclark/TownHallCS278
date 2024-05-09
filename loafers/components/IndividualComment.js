@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { COLORS, FONTS } from "../constants.js";
 
-const IndividualComment = ({ spec, author, content }) => {
+const IndividualComment = ({ spec, author, content, specColor, setSpecColor }) => {
+
     const colorScale = [
         { low: 0, high: 2, color: '#f00f63' }, //pink
         { low: 2, high: 4, color: '#c319e6' }, //purple
@@ -15,6 +16,7 @@ const IndividualComment = ({ spec, author, content }) => {
         const decColor = parseInt(col, 16);
         const sum = decColor + offset;
         // return sum.toString(16);
+        setSpecColor(col);
         return col;
     }
 
@@ -25,6 +27,7 @@ const IndividualComment = ({ spec, author, content }) => {
                 return addHexNum(colorScale[i].color, spec);
             }
         }
+        setSpecColor('white');
         return 'white';
     }
 

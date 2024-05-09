@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { COLORS, FONTS } from "../constants.js";
+import { supabase, postComment } from '../Supabase.js';
 
-const WriteComment = ({ hasCommented, showComments }) => {
+const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasCommented, showComments }) => {
   const [comment, setComment] = useState('');
+  const [user, setUser] = useState(null);
 
+  
   const handleCommentChange = (text) => {
     setComment(text);
   };
 
-  const handleSubmit = () => {
-    showComments(true);
-    // onSubmit(comment);
+  const handleSubmit = async () => {
+    const newComment = {
+      spectrum: spectrumValue,
+      author: user ? user.pseudo : "Anonymous", // Check if user is available, use user.pseudo as author if available, otherwise set as "Anonymous"
+      content: comment,
+    };
+    const response = await postComment(newComment);
     setComment('');
+    showComments(true);
+    if (response) {
+      setComment('');
+      showComments(true);
+    }
+    setComment('');
+    showComments(true);
   };
 
   return (
@@ -24,14 +38,11 @@ const WriteComment = ({ hasCommented, showComments }) => {
         placeholder="Write your comment..."
         multiline
       />
-
-      <TouchableOpacity 
-      onPress={handleSubmit}
-      style={styles.submitResponseButton}
+      <TouchableOpacity
+        onPress={handleSubmit}
+        style={styles.submitResponseButton}
       >
-
         <Text style={styles.submitResponseButtonText}>Submit</Text>
-
       </TouchableOpacity>
     </View>
   );

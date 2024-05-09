@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import Comment from "./IndividualComment.js"; // Import the Comment component
 import { COLORS, FONTS } from "../constants.js";
-import supabase from "../Supabase.js";
+import { supabase, postComment } from "../Supabase.js";
 
-const CommentsFeed = ({ comments }) => {
+const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [testComments, setTestComments] = useState(null);
+  
 
   useEffect(() => {
     const fetch = async () => {
@@ -43,6 +44,8 @@ const CommentsFeed = ({ comments }) => {
             spec={item.spectrum}
             author={item.author}
             content={item.content}
+            specColor={specColor}
+            setSpecColor={setSpecColor}
           />
         )}
         keyExtractor={(item, index) => index.toString()}
