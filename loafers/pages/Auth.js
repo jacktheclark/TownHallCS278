@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  SafeAreaView,
   View,
   Text,
   TextInput,
@@ -105,7 +106,7 @@ const Auth = ({ navigation, route }) => {
           Sign Up
         </Text>
       </TouchableOpacity> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
