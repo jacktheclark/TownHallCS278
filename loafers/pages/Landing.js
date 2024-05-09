@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.background_dark,
-    borderRadius: 20,
+    backgroundColor: COLORS.dark,
+    // borderRadius: 20,
   },
   instructionsText: {
     alignItems: "center",

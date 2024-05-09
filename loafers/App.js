@@ -36,7 +36,7 @@ export default function App() {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: COLORS.white,
+              backgroundColor: COLORS.dark,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -64,7 +64,7 @@ export default function App() {
           options={{
             title: "Question of the Day",
             headerStyle: {
-              backgroundColor: COLORS.white,
+              backgroundColor: COLORS.dark,
             },
             headerTintColor: COLORS.lightaccent,
             headerTitleStyle: {
@@ -80,7 +80,7 @@ export default function App() {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: COLORS.white,
+              backgroundColor: COLORS.dark,
             },
             headerTintColor: COLORS.lightaccent,
             headerTitleStyle: {

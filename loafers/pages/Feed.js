@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, Text, StyleSheet, FlatList } from "react-native";
+import {View, Text, StyleSheet, FlatList } from "react-native";
 import { COLORS, FONTS } from "../constants.js";
 import CommentsFeed from "../components/CommentsFeed.js";
 import DiscussionTopic from "../components/DiscussionTopic.js";
@@ -18,7 +18,7 @@ export default function Feed({ navigation, route }) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* <Text style={styles.testText}>feed screen</Text> */}
       <DiscussionTopic question={"insert controversial question here"} />
       <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
@@ -33,7 +33,7 @@ export default function Feed({ navigation, route }) {
         hasCommented={hasCommented} 
         showComments={showComments} />
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     flex: 1,
     // alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.background_dark,
-    borderRadius: 20,
+    backgroundColor: COLORS.dark,
+    // borderRadius: 20,
     //borderColor: "red",
     //borderWidth: 5,
   },
