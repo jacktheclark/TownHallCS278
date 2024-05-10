@@ -8,6 +8,7 @@ export const COLORS = {
     white: "#F0F0F0",
     accent: "#65ffe9",
     lightaccent: "#D9FFFA",
+    gray: "#686c75",
     background_light: "#ECECEC",
     background_dark: "#FC9707",
   };

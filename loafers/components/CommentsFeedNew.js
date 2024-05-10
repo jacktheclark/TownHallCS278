@@ -4,9 +4,9 @@ import Comment from "./IndividualComment.js"; // Import the Comment component
 import { COLORS, FONTS } from "../constants.js";
 import { supabase, postComment } from "../Supabase.js";
 
-const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
+const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
-  const [testComments, setTestComments] = useState(null);
+  const [commentList, setCommentList] = useState(null);
   const [upvotedComments, setUpvotedComments] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
           throw error;
         }
         if (data) {
-          setTestComments(data.reverse()); // Reverse (most recent first)
+          setCommentList(data.reverse()); // Reverse (most recent first)
         }
       } catch (error) {
         setFetchError("Could not fetch");
@@ -28,56 +28,50 @@ const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
     fetchComments();
   }, []);
 
-  const handleVote = async (commentId, voteType) => {
+  const handleVote = async (commentId, upOrDown) => {
     try {
-      // Fetch the current vote count for the comment
+      // get current vote counts
       const { data: commentData, error: commentError } = await supabase
         .from("Comments")
         .select("votes")
         .eq('id', commentId)
         .single();
-
       if (commentError) {
         throw commentError;
       }
-
-      // Check if the comment has already been upvoted
+      // local state to check what they've already uploaded
       const isUpvoted = upvotedComments.includes(commentId);
-
-      // Calculate the updated vote count
+      // updated running vote count
       let updatedVoteCount = commentData.votes;
-      if (voteType === 'upvote') {
+      if (upOrDown === 1) {
         updatedVoteCount += isUpvoted ? -1 : 1; // Decrement if already upvoted, otherwise increment
       } else {
         updatedVoteCount -= 1; // Decrement for downvote
       }
-
-      // Update the vote count in the Comments table
+      //update vote count in db
       const { data: updatedData, error: updateError } = await supabase
         .from("Comments")
         .update({ votes: updatedVoteCount })
         .eq('id', commentId);
-
       if (updateError) {
         throw updateError;
       }
-
-      // Update the vote count in the local state
-      const updatedComments = testComments.map(comment => {
+      // upvote vote count in local
+      const updatedComments = commentList.map(comment => {
         if (comment.id === commentId) {
           return { ...comment, votes: updatedVoteCount };
         }
         return comment;
       });
-      setTestComments(updatedComments); // Update local state with new vote count
+      setCommentList(updatedComments); // updating local commentslist to track
 
-      // Update the list of upvoted comments
-      if (voteType === 'upvote') {
+      // update my internal list of upvoted comments
+      if (upOrDown === 1) {
         if (isUpvoted) {
-          // Remove commentId from upvotedComments list if already upvoted
+          // already upvoted, so remove it from the comment list
           setUpvotedComments(prevState => prevState.filter(id => id !== commentId));
         } else {
-          // Add commentId to upvotedComments list if not already upvoted
+          // not already upvoted, so add this comment to the comment list
           setUpvotedComments(prevState => [...prevState, commentId]);
         }
       }
@@ -90,7 +84,7 @@ const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
     <View style={styles.container}>
       <FlatList
         style={styles.flatList}
-        data={testComments || []} // Use testComments or an empty array if testComments is null
+        data={commentList || []} // Use testComments or an empty array if testComments is null
         renderItem={({ item }) => (
           <Comment
             spec={item.spectrum}
@@ -99,8 +93,8 @@ const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
             specColor={specColor}
             setSpecColor={setSpecColor}
             voteCount={item.votes}
-            onUpvote={() => handleVote(item.id, 'upvote')}
-            onDownvote={() => handleVote(item.id, 'downvote')}
+            onUpvote={() => handleVote(item.id, 1)} //1 is upvote
+            onDownvote={() => handleVote(item.id, -1)} //0 is downvote
           />
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -119,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommentsFeed;
+export default CommentsFeedNew;

@@ -22,29 +22,24 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
     { low: 9, high: 10, color: '#f94106' }, //red/orange
 ];
 
-useEffect(() => {
+  useEffect(() => {
   // Update the local vote count when the voteCount prop changes
-  setLocalVoteCount(voteCount);
+    setLocalVoteCount(voteCount);
   }, [voteCount]);
 
-    const addHexNum = (col, offset) => {
-        const decColor = parseInt(col, 16);
-        const sum = decColor + offset;
-        // return sum.toString(16);
-        setSpecColor(col);
-        return col;
-    }
+  const pickColor = React.useMemo(() => {
+    let selectedColor = 'white'; //default
 
-    const pickColor = () => {
-        console.log('spec = ', spec);
-        for (let i = 0; i < colorScale.length; i++){
-            if (spec >= colorScale[i].low && spec <= colorScale[i].high) {
-                return addHexNum(colorScale[i].color, spec);
-            }
+    for (let i = 0; i < colorScale.length; i++){
+        if (spec >= colorScale[i].low && spec <= colorScale[i].high) {
+            selectedColor = colorScale[i].color;
+            break; //exit when we good
         }
-        setSpecColor('white');
-        return 'white';
     }
+    // set speccolor outside of loop so i dont infinite render
+    return selectedColor;
+    }, [spec, setSpecColor]);
+
 
     const handleUpvote = async () => {
       if (!hasUpvoted) {
@@ -76,20 +71,20 @@ useEffect(() => {
   return (
     <View style={styles.bigContainer}>
       <View style={styles.commentContainer}>
-        <Text style={[styles.author, {color: pickColor()}]}>{author}</Text>
+        <Text style={[styles.author, {color: pickColor}]}>{author}</Text>
         <Text style={styles.content}>{content}</Text>
       </View>
       
       <View style={styles.rightSideContainer}>
           <View style={styles.voteCountsContainer}>
-            <Text style={[styles.voteCounts, {color: pickColor()}]}>{localVoteCount}</Text>
+            <Text style={[styles.voteCounts, {color: pickColor}]}>{localVoteCount}</Text>
           </View>
           <View style={styles.iconContainer}>
           <TouchableOpacity onPress={handleUpvote}>
-            <AntDesign name="up" size={24} color={hasUpvoted ? pickColor() : COLORS.lightaccent} />
+            <AntDesign name="up" size={24} color={hasUpvoted ? pickColor : COLORS.lightaccent} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleDownvote}>
-            <AntDesign name="down" size={24} color={hasDownvoted ? pickColor() : COLORS.lightaccent} />
+            <AntDesign name="down" size={24} color={hasDownvoted ? pickColor : COLORS.lightaccent} />
           </TouchableOpacity>
           </View>
       </View>
