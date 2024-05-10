@@ -15,7 +15,7 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
   const handleSubmit = async () => {
     const newComment = {
       spectrum: spectrumValue,
-      author: user ? user.pseudo : "Anonymous", // Check if user is available, use user.pseudo as author if available, otherwise set as "Anonymous"
+      author: user ? user.pseudo : "Anonymous", //NOT WORKING YET
       content: comment,
     };
     const response = await postComment(newComment);
@@ -51,7 +51,7 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%", // Set width to 100%
+    width: "100%",
   },
   input: {
     height: 100,

@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: COLORS.dark,
-    // borderRadius: 20,
   },
   instructionsText: {
     alignItems: "center",
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: FONTS.bold,
     color: COLORS.lightaccent,
-    marginTop: 60, // Move the instructions towards the top
+    marginTop: 60,
   },
   subtitleText: {
     textAlign: "center",
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.medium,
     color: COLORS.lightaccent,
-    marginTop: 70, // Move the instructions towards the top
+    marginTop: 70,
   },
   row: {
     flexDirection: "row",

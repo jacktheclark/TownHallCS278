@@ -64,7 +64,6 @@ const CommentsFeedSimilar = ({ specValue, specColor, setSpecColor }) => {
         return comment;
       });
       setCommentList(updatedComments); // updating local commentslist to track
-
       // update my internal list of upvoted comments
       if (upOrDown === 1) {
         if (isUpvoted) {

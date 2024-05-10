@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
-import Comment from "./IndividualComment.js"; // Import the Comment component
+import Comment from "./IndividualComment.js";
 import { COLORS, FONTS } from "../constants.js";
 import { supabase, postComment } from "../Supabase.js";
 
@@ -25,7 +25,6 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
         console.log(error);
       }
     };
-
     fetchComments();
   }, []);
 
@@ -85,7 +84,7 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
     <View style={styles.container}>
       <FlatList
         style={styles.flatList}
-        data={commentList || []} // Use testComments or an empty array if testComments is null
+        data={commentList || []}
         renderItem={({ item }) => (
           <Comment
             spec={item.spectrum}
@@ -95,7 +94,7 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
             setSpecColor={setSpecColor}
             voteCount={item.votes}
             onUpvote={() => handleVote(item.id, 1)} //1 is upvote
-            onDownvote={() => handleVote(item.id, -1)} //0 is downvote
+            onDownvote={() => handleVote(item.id, -1)} //-1 is downvote
           />
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -107,10 +106,10 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%", // Set width to 100%
+    width: "100%",
   },
   flatList: {
-    width: "100%", // Set width to 100%
+    width: "100%",
   },
 });
 

@@ -15,7 +15,7 @@ const Signup = ({ navigation, route }) => {
       const { data: user } = await supabase.auth.getUser();
 
       if (user) {
-        // Check if the user exists in the "UserInfo" table
+        //does uer exist
         const { data: existingUserInfo, error: existingUserInfoError } =
           await supabase
             .from("UserInfo")
@@ -29,7 +29,7 @@ const Signup = ({ navigation, route }) => {
           );
         } else {
           if (existingUserInfo.length === 0) {
-            // If the user doesn't exist, insert a new row for the user
+            //new row in the db
             const { data: newUserRow, error: newUserRowError } = await supabase
               .from("UserInfo")
               .insert({ userid: user.user.id, pseudo: displayName });
@@ -43,7 +43,7 @@ const Signup = ({ navigation, route }) => {
               console.log("New user row inserted successfully:", newUserRow);
             }
           } else {
-            // If the user already exists, update the existing row
+            //update existing row
             const { data: updatedUserInfo, error: updateUserInfoError } =
               await supabase
                 .from("UserInfo")
