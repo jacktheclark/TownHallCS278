@@ -71,6 +71,7 @@ const SliderComponent = ({spectrumValue, setSpectrumValue, specColor, setSpecCol
         value={spectrumValue}
         onValueChange={spectrumChanger}
         thumbTintColor={specColor}
+
         />
     </View>
   );
@@ -78,13 +79,14 @@ const SliderComponent = ({spectrumValue, setSpectrumValue, specColor, setSpecCol
 
 const styles = StyleSheet.create({
   slider: {
-    color: COLORS.lightaccent,
-    height: 40,
+    color: COLORS.white,
+    height: '30%',
     width: '80%',
   },
   title: {
     color: COLORS.lightaccent,
     fontFamily: FONTS.body,
+    fontSize: '20%',
     textAlign: "center",
   },
   container: {

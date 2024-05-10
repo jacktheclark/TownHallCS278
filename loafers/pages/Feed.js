@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {View, Text, StyleSheet, FlatList } from "react-native";
+import {ImageBackground, View, Text, StyleSheet, FlatList } from "react-native";
 import { COLORS, FONTS } from "../constants.js";
 import CommentsFeed from "../components/CommentsFeed.js";
 import DiscussionTopic from "../components/DiscussionTopic.js";
@@ -19,20 +19,25 @@ export default function Feed({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.testText}>feed screen</Text> */}
-      <DiscussionTopic question={"What do you think of the new Stanford president hiring?"} />
-      <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
-        specColor={specColor} setSpecColor={setSpecColor}/>
-      {hasCommented ? (
-        <CommentsFeed specColor={specColor} setSpecColor={setSpecColor}/>
-      ) : (
-        <WriteComment 
-        displayName = {displayName}
-        spectrumValue={spectrumValue} 
-        setSpectrumValue={setSpectrumValue}
-        hasCommented={hasCommented} 
-        showComments={showComments} />
-      )}
+      <ImageBackground source={require('../assets/backgroundImage.jpeg')} style={styles.header}>
+      </ImageBackground>
+      <View style={styles.bodyContainer}>
+        {/* <Text style={styles.testText}>feed screen</Text> */}
+        <DiscussionTopic question={"What do you think of the new Stanford president hiring?"} />
+        <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
+          specColor={specColor} setSpecColor={setSpecColor}/>
+        {hasCommented ? (
+          <CommentsFeed specColor={specColor} setSpecColor={setSpecColor}/>
+        ) : (
+          <WriteComment 
+          displayName = {displayName}
+          spectrumValue={spectrumValue} 
+          setSpectrumValue={setSpectrumValue}
+          hasCommented={hasCommented} 
+          showComments={showComments} />
+        )}
+      </View>
+
     </View>
   );
 }
@@ -42,10 +47,28 @@ const styles = StyleSheet.create({
     flex: 1,
     // alignItems: "center",
     justifyContent: "center",
+    backgroundColor: COLORS.background_dark,
+    
+  },
+  header: {
+    // height: '12%',
+    flex: 1, 
+    resizeMode: "cover", 
+    justifyContent: "center", 
+    height: '25%'
+    // borderBottomEndRadius: -20,
+  },
+  bodyContainer: {
+    // flex: 1,
+    position: 'absolute',
+    top: '12%',
     backgroundColor: COLORS.dark,
-    // borderRadius: 20,
-    //borderColor: "red",
-    //borderWidth: 5,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    width: '100%',
+    height: '90%',
+    padding: '5%',
+    // textAlign: 'left',
   },
   testText: {
     marginTop: 100,
@@ -54,5 +77,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: FONTS.body,
     color: COLORS.lightaccent,
+    textAlign: "left",
   },
 });
