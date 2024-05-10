@@ -7,6 +7,7 @@ import { supabase, postComment } from "../Supabase.js";
 const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [testComments, setTestComments] = useState(null);
+  const [voteCountState, setVoteCountState] = useState(0);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -39,6 +40,7 @@ const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
             content={item.content}
             specColor={specColor}
             setSpecColor={setSpecColor}
+            voteCount={item.votes}
           />
         )}
         keyExtractor={(item, index) => index.toString()}
