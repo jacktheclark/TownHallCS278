@@ -12,6 +12,7 @@ const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
+        //decending order of votes
         const { data, error } = await supabase
           .from("Comments")
           .select()
@@ -47,9 +48,9 @@ const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
       // updated running vote count
       let updatedVoteCount = commentData.votes;
       if (upOrDown === 1) {
-        updatedVoteCount += isUpvoted ? -1 : 1; // Decrement if already upvoted, otherwise increment
+        updatedVoteCount += isUpvoted ? -1 : 1; // dec if already upvoted, otherwise increment
       } else {
-        updatedVoteCount -= 1; // Decrement for downvote
+        updatedVoteCount -= 1; // dec for downvote
       }
       //update vote count in db
       const { data: updatedData, error: updateError } = await supabase

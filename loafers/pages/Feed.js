@@ -3,6 +3,8 @@ import {View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native"
 import { COLORS, FONTS } from "../constants.js";
 import CommentsFeedNew from "../components/CommentsFeedNew.js";
 import CommentsFeedHot from "../components/CommentsFeedHot.js";
+import CommentsFeedSimilar from "../components/CommentsFeedSimilar.js";
+import CommentsFeedDis from "../components/CommentsFeedDis.js";
 import DiscussionTopic from "../components/DiscussionTopic.js";
 import SliderComponent from "../components/SliderComponent.js";
 import WriteComment from "../components/WriteComment.js";
@@ -66,10 +68,12 @@ export default function Feed({ navigation, route }) {
           {/* <CommentsFeedHot specColor={specColor} setSpecColor={setSpecColor}/> */}
           {sortOption === 'New' ? (
               <CommentsFeedNew specColor={specColor} setSpecColor={setSpecColor} />
-            ) : sortOption === 'Hot' ? (
+          ) : sortOption === 'Hot' ? (
               <CommentsFeedHot specColor={specColor} setSpecColor={setSpecColor} />
-            ) : (
-            <View />
+          ) : sortOption === 'Similar' ? (
+              <CommentsFeedSimilar specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
+          ) : (
+              <CommentsFeedDis specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
           )}
         </View>
       ) : (
