@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
-import Comment from "./IndividualComment.js"; // Import the Comment component
-import { COLORS, FONTS } from "../constants.js";
-import { supabase, postComment } from "../Supabase.js";
+import Comment from "./IndividualComment.js";
+import { supabase } from "../Supabase.js";
 
-const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
+const CommentsFeedDis = ({ specValue, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [commentList, setCommentList] = useState(null);
   const [upvotedComments, setUpvotedComments] = useState([]);
@@ -17,17 +16,17 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
           throw error;
         }
         if (data) {
-          //data in increasing order of age (newest first)
-          setCommentList(data.reverse()); 
+          // distance in decreasing order
+          const sortedComments = data.sort((a, b) => Math.abs(a.spectrum - specValue) - Math.abs(b.spectrum - specValue)).reverse();
+          setCommentList(sortedComments);
         }
       } catch (error) {
         setFetchError("Could not fetch");
         console.log(error);
       }
     };
-
     fetchComments();
-  }, []);
+  }, [specValue]);
 
   const handleVote = async (commentId, upOrDown) => {
     try {
@@ -85,7 +84,7 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
     <View style={styles.container}>
       <FlatList
         style={styles.flatList}
-        data={commentList || []} // Use testComments or an empty array if testComments is null
+        data={commentList || []}
         renderItem={({ item }) => (
           <Comment
             spec={item.spectrum}
@@ -94,8 +93,8 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
             specColor={specColor}
             setSpecColor={setSpecColor}
             voteCount={item.votes}
-            onUpvote={() => handleVote(item.id, 1)} //1 is upvote
-            onDownvote={() => handleVote(item.id, -1)} //0 is downvote
+            onUpvote={() => handleVote(item.id, 1)}
+            onDownvote={() => handleVote(item.id, -1)}
           />
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -107,11 +106,11 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%", // Set width to 100%
+    width: "100%",
   },
   flatList: {
-    width: "100%", // Set width to 100%
+    width: "100%",
   },
 });
 
-export default CommentsFeedNew;
+export default CommentsFeedDis;
