@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: FONTS.bold,
     color: COLORS.lightaccent,
-    marginTop: 60, // Move the instructions towards the top
+    marginTop: 60,
   },
 });
 

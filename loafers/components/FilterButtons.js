@@ -16,20 +16,14 @@ const FilterButtons = ({ specColor, sortOption, setSortOption }) => {
   return (
     <View style={styles.buttonHolder}>
       <TouchableOpacity
-        style={[
-          styles.sortButton,
-          sortOption === 'New' ? styles.activeSortButton : styles.dormantSortButton,
-        ]}
+        style={styles.sortButton}
         onPress={() => handleFilterChange('New')}
       >
         <AntDesign name={sortOption === 'New' ? "clockcircle" : "clockcircleo"} size={24} 
             color={sortOption === 'New' ? specColor : COLORS.lightaccent} />
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.sortButton,
-          sortOption === 'Hot' ? styles.activeSortButton : styles.dormantSortButton,
-        ]}
+        style={styles.sortButton}
         onPress={() => handleFilterChange('Hot')}
       >
         {sortOption === 'Hot' ? (
@@ -40,20 +34,14 @@ const FilterButtons = ({ specColor, sortOption, setSortOption }) => {
         
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.sortButton,
-          sortOption === 'Similar' ? styles.activeSortButton : styles.dormantSortButton,
-        ]}
+        style={styles.sortButton}
         onPress={() => handleFilterChange('Similar')}
       >
         <AntDesign name={sortOption === 'Similar' ? "eye" : "eyeo"} size={24} 
             color={sortOption === 'Similar' ? specColor : COLORS.lightaccent}  />
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.sortButton,
-          sortOption === 'Dissimilar' ? styles.activeSortButton : styles.dormantSortButton,
-        ]}
+        style={styles.sortButton}
         onPress={() => handleFilterChange('Dissimilar')}
       >
         <Ionicons name={sortOption === 'Dissimilar' ? "telescope" : "telescope-outline"} size={24} 
@@ -72,7 +60,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderWidth: 1,
     borderTopColor: COLORS.lightaccent,
-    // borderBottomColor: COLORS.lightaccent,
     marginTop: 12,
     marginBottom: 12,
   },
@@ -81,12 +68,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 25,
     borderWidth: 1,
-  },
-  activeSortButton: {
-    // backgroundColor: COLORS.lightaccent,
-  },
-  dormantSortButton: {
-    // borderColor: COLORS.gray,
   },
   sortText: {
     color: COLORS.lightaccent,

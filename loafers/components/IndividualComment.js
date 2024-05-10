@@ -20,37 +20,42 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
     { low: 7, high: 8, color: '#e5f708' }, //yellow
     { low: 8, high: 9, color: '#ff9200' }, //orange
     { low: 9, high: 10, color: '#f94106' }, //red/orange
-];
+  ];
+
+  const colorVec = [
+    '#ff006c', //hotpink
+    '#f00f63', //pink
+    '#f20d82', //pink/purple
+    '#b813ec', //purple/blue
+    '#551ee1', //bluer
+    '#2052df', //light blue
+    '#1cc8e3', //cyan
+    '#22dd95', //mint
+    '#e5f708', //yellow
+    '#ff9200', //orange
+    '#f94106', //red/orange
+  ];
 
   useEffect(() => {
   // Update the local vote count when the voteCount prop changes
     setLocalVoteCount(voteCount);
   }, [voteCount]);
 
-  const pickColor = React.useMemo(() => {
-    let selectedColor = 'white'; //default
-
-    for (let i = 0; i < colorScale.length; i++){
-        if (spec >= colorScale[i].low && spec <= colorScale[i].high) {
-            selectedColor = colorScale[i].color;
-            break; //exit when we good
-        }
-    }
-    // set speccolor outside of loop so i dont infinite render
-    return selectedColor;
-    }, [spec, setSpecColor]);
+  const pickColor = React.useMemo(() => { //weird case where using this works
+    return colorVec[Math.round(spec)] //bc we need to repick the color each for each comment
+  }, [spec, setSpecColor]);
 
 
     const handleUpvote = async () => {
       if (!hasUpvoted) {
         setHasUpvoted(true);
         setHasDownvoted(false);
-        setLocalVoteCount(prevCount => prevCount + 1); // Update the local vote count
-        onUpvote(); // Call the onUpvote callback provided by the parent component
+        setLocalVoteCount(prevCount => prevCount + 1); //local vote count
+        onUpvote(); //callback
       } else {
         setHasUpvoted(false);
-        setLocalVoteCount(prevCount => prevCount - 1); // Update the local vote count
-        onUpvote(); // Call the onUpvote callback provided by the parent component
+        setLocalVoteCount(prevCount => prevCount - 1);
+        onUpvote();
       }
     };
   
@@ -58,12 +63,12 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
       if (!hasDownvoted) {
         setHasDownvoted(true);
         setHasUpvoted(false);
-        setLocalVoteCount(prevCount => prevCount - 1); // Update the local vote count
-        onDownvote(); // Call the onDownvote callback provided by the parent component
+        setLocalVoteCount(prevCount => prevCount - 1);
+        onDownvote();
       } else {
         setHasUpvoted(false);
-        setLocalVoteCount(prevCount => prevCount - 1); // Update the local vote count
-        onUpvote(); // Call the onUpvote callback provided by the parent component
+        setLocalVoteCount(prevCount => prevCount - 1);
+        onUpvote();
       }
     };
 
@@ -88,20 +93,16 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
           </TouchableOpacity>
           </View>
       </View>
-
-      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   bigContainer: {
-    flexDirection: 'row', // Horizontal row
-    justifyContent: 'space-between', // Align children at the ends
-    alignItems: 'center', // Align children vertically at the center
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 10,
-    // borderBottomWidth: 1,
-    // borderBottomColor: COLORS.lightaccent,
     borderWidth: 1,
     borderColor: COLORS.lightaccent,
     marginBottom: 5,

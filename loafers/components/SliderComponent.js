@@ -9,12 +9,8 @@ import supabase from "../Supabase.js";
 const SliderComponent = ({spectrumValue, setSpectrumValue, specColor, setSpecColor}) => {
 
 
-    const spectrumChanger = (value) => {
-        setSpectrumValue(value);
-      };
-
-    const getColor = (spectrumValue) => {
-      let rounded = Math.round(spectrumValue);
+  const spectrumChanger = (value) => {
+      setSpectrumValue(value);
     };
 
   return (
@@ -50,15 +46,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   container: {
-    // flex: 1,
     alignItems: 'center',
   },
   horizontalContainer: {
-    // flex: 1,
-    flexDirection: 'row', // Arrange children in a row
-    justifyContent: 'space-between', // Space out the children evenly
-    width: '80%', // Adjust the width to match the slider's width
-    marginBottom: 10, // Add margin at the bottom for separation
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+    marginBottom: 10,
   }
 });
 
