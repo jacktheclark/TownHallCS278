@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS } from "../constants.js";
 import { AntDesign } from '@expo/vector-icons';
 
-const IndividualComment = ({ spec, author, content, specColor, setSpecColor, voteCount }) => {
+const IndividualComment = ({ spec, author, content, specColor, setSpecColor, voteCount, onUpvote, onDownvote }) => {
   const [hasUpvoted, setHasUpvoted] = useState(false);
   const [hasDownvoted, setHasDownvoted] = useState(false);
+  const [localVoteCount, setLocalVoteCount] = useState(0);
   
 
   const colorScale = [
@@ -20,6 +21,11 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
     { low: 8, high: 9, color: '#ff9200' }, //orange
     { low: 9, high: 10, color: '#f94106' }, //red/orange
 ];
+
+useEffect(() => {
+  // Update the local vote count when the voteCount prop changes
+  setLocalVoteCount(voteCount);
+  }, [voteCount]);
 
     const addHexNum = (col, offset) => {
         const decColor = parseInt(col, 16);
@@ -41,20 +47,28 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
     }
 
     const handleUpvote = async () => {
-      if (hasUpvoted) {
-        setHasUpvoted(false); // If already upvoted, undo the upvote
-      } else {
+      if (!hasUpvoted) {
         setHasUpvoted(true);
         setHasDownvoted(false);
+        setLocalVoteCount(prevCount => prevCount + 1); // Update the local vote count
+        onUpvote(); // Call the onUpvote callback provided by the parent component
+      } else {
+        setHasUpvoted(false);
+        setLocalVoteCount(prevCount => prevCount - 1); // Update the local vote count
+        onUpvote(); // Call the onUpvote callback provided by the parent component
       }
     };
   
     const handleDownvote = async () => {
-      if (hasDownvoted) {
-        setHasDownvoted(false); // If already downvoted, undo the downvote
-      } else {
+      if (!hasDownvoted) {
         setHasDownvoted(true);
         setHasUpvoted(false);
+        setLocalVoteCount(prevCount => prevCount - 1); // Update the local vote count
+        onDownvote(); // Call the onDownvote callback provided by the parent component
+      } else {
+        setHasUpvoted(false);
+        setLocalVoteCount(prevCount => prevCount - 1); // Update the local vote count
+        onUpvote(); // Call the onUpvote callback provided by the parent component
       }
     };
 
@@ -68,7 +82,7 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
       
       <View style={styles.rightSideContainer}>
           <View style={styles.voteCountsContainer}>
-            <Text style={[styles.voteCounts, {color: pickColor()}]}>10</Text>
+            <Text style={[styles.voteCounts, {color: pickColor()}]}>{localVoteCount}</Text>
           </View>
           <View style={styles.iconContainer}>
           <TouchableOpacity onPress={handleUpvote}>
