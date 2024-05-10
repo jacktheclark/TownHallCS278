@@ -7,6 +7,7 @@ import { supabase, postComment } from "../Supabase.js";
 const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [testComments, setTestComments] = useState(null);
+  const [upvotedComments, setUpvotedComments] = useState([]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -24,36 +25,66 @@ const CommentsFeed = ({ comments, specColor, setSpecColor }) => {
       }
     };
 
-    fetchComments(); // Call the fetchComments function once
-  }, []); // Empty dependency array ensures the effect runs only once
+    fetchComments();
+  }, []);
 
   const handleVote = async (commentId, voteType) => {
     try {
-      // Update the vote count in the database based on voteType (upvote or downvote)
-      const { data, error } = await supabase
+      // Fetch the current vote count for the comment
+      const { data: commentData, error: commentError } = await supabase
         .from("Comments")
-        .update({
-          votes: supabase.raw(`votes ${voteType === 'upvote' ? '+' : '-'} 1`),
-        })
-        .eq('id', commentId);
-      
-      if (error) {
-        throw error;
+        .select("votes")
+        .eq('id', commentId)
+        .single();
+
+      if (commentError) {
+        throw commentError;
       }
-      
-      // Update the local state with the updated vote count
+
+      // Check if the comment has already been upvoted
+      const isUpvoted = upvotedComments.includes(commentId);
+
+      // Calculate the updated vote count
+      let updatedVoteCount = commentData.votes;
+      if (voteType === 'upvote') {
+        updatedVoteCount += isUpvoted ? -1 : 1; // Decrement if already upvoted, otherwise increment
+      } else {
+        updatedVoteCount -= 1; // Decrement for downvote
+      }
+
+      // Update the vote count in the Comments table
+      const { data: updatedData, error: updateError } = await supabase
+        .from("Comments")
+        .update({ votes: updatedVoteCount })
+        .eq('id', commentId);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      // Update the vote count in the local state
       const updatedComments = testComments.map(comment => {
         if (comment.id === commentId) {
-          return { ...comment, votes: data[0].votes };
+          return { ...comment, votes: updatedVoteCount };
         }
         return comment;
       });
-      setTestComments(updatedComments);
+      setTestComments(updatedComments); // Update local state with new vote count
+
+      // Update the list of upvoted comments
+      if (voteType === 'upvote') {
+        if (isUpvoted) {
+          // Remove commentId from upvotedComments list if already upvoted
+          setUpvotedComments(prevState => prevState.filter(id => id !== commentId));
+        } else {
+          // Add commentId to upvotedComments list if not already upvoted
+          setUpvotedComments(prevState => [...prevState, commentId]);
+        }
+      }
     } catch (error) {
       console.error("Error updating vote count:", error.message);
     }
   };
-
 
   return (
     <View style={styles.container}>
