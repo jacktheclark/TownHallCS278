@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, TouchableOpacity } from "react-native";
-import { Provider as PaperProvider } from 'react-native-paper';
-import supabase from "../Supabase.js";
+import { Provider as PaperProvider } from "react-native-paper";
+import { supabase, postComment } from "../Supabase.js";
 import { COLORS, FONTS } from "../constants.js";
 
 const Signup = ({ navigation, route }) => {

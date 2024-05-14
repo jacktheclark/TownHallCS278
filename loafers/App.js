@@ -50,7 +50,7 @@ export default function App() {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: COLORS.white,
+              backgroundColor: COLORS.dark,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
