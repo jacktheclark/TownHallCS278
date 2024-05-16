@@ -15,7 +15,7 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
   const handleSubmit = async () => {
     const newComment = {
       spectrum: spectrumValue,
-      author: user ? user.pseudo : "Anonymous", //NOT WORKING YET
+      author: user ? user.pseudo : "RidiculousParakeet", //NOT WORKING YET
       content: comment,
     };
     const response = await postComment(newComment);

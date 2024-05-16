@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     padding: 10,
     // borderBottomWidth: 1,
     // borderBottomColor: COLORS.lightaccent,
+    width: '76%',
   },
   iconContainer: {
     padding: 10,
@@ -124,9 +125,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Horizontal row
     justifyContent: 'space-between', // Align children at the ends
     alignItems: 'center', // Align children vertically at the center
-    // padding: 10,
-    // borderBottomWidth: 1,
-    // borderBottomColor: COLORS.lightaccent,
     marginBottom: 5,
     marginTop: 5,
     borderRadius: 10,
@@ -147,6 +145,7 @@ const styles = StyleSheet.create({
     color: COLORS.lightaccent,
     fontFamily: FONTS.body,
     fontSize: 14,
+    lineHeight: '18',
   },
 });
 
