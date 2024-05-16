@@ -68,8 +68,8 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
         setLocalVoteCount(prevCount => prevCount - 1);
         onDownvote();
       } else {
-        setHasUpvoted(false);
-        setLocalVoteCount(prevCount => prevCount - 1);
+        setHasDownvoted(false);
+        setLocalVoteCount(prevCount => prevCount + 1);
         onUpvote();
       }
     };
