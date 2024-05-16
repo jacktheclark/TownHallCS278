@@ -38,7 +38,7 @@ export default function Feed({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <DiscussionTopic question={`What do you think of the new Stanford president hiring?, ${displayName}?`} />
+      <DiscussionTopic question={`What do you think of the new Stanford president hiring, ${displayName}?`} />
       <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
         specColor={specColor} setSpecColor={setSpecColor}/>
       {hasCommented ? (

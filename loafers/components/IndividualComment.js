@@ -47,32 +47,38 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
     return colorVec[Math.round(spec)] //bc we need to repick the color each for each comment
   }, [spec, setSpecColor]);
 
-
-    const handleUpvote = async () => {
-      if (!hasUpvoted) {
-        setHasUpvoted(true);
-        setHasDownvoted(false);
-        setLocalVoteCount(prevCount => prevCount + 1); //local vote count
-        onUpvote(); //callback
-      } else {
-        setHasUpvoted(false);
-        setLocalVoteCount(prevCount => prevCount - 1);
-        onUpvote();
-      }
-    };
-  
-    const handleDownvote = async () => {
-      if (!hasDownvoted) {
-        setHasDownvoted(true);
-        setHasUpvoted(false);
-        setLocalVoteCount(prevCount => prevCount - 1);
+  const handleUpvote = async () => {
+    if (!hasUpvoted) {
+      setHasUpvoted(true);
+      setLocalVoteCount(prevCount => (hasDownvoted ? prevCount + 2 : prevCount + 1));
+      if (hasDownvoted) {
+        setHasDownvoted(false); // Undo downvote if it's active
         onDownvote();
-      } else {
-        setHasDownvoted(false);
-        setLocalVoteCount(prevCount => prevCount + 1);
+      }
+      onUpvote();
+    } else {
+      setHasUpvoted(false);
+      setLocalVoteCount(prevCount => prevCount - 1);
+      onDownvote(); // Undo upvote if it's active
+    }
+  };
+  
+  const handleDownvote = async () => {
+    if (!hasDownvoted) {
+      setHasDownvoted(true);
+      setLocalVoteCount(prevCount => (hasUpvoted ? prevCount - 2 : prevCount - 1));
+      if (hasUpvoted) {
+        setHasUpvoted(false); // Undo upvote if it's active
         onUpvote();
       }
-    };
+      onDownvote();
+    } else {
+      setHasDownvoted(false);
+      setLocalVoteCount(prevCount => prevCount + 1);
+      onUpvote(); // Undo downvote if it's active
+    }
+  };
+  
 
 
     const handleReport = async () => {
@@ -149,7 +155,7 @@ const styles = StyleSheet.create({
   },
   leftSideContainer: {
     padding: 10,
-    width: '76%',
+    width: '70%',
   },
   reportButton: {
     marginBottom: 4,
@@ -189,6 +195,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body,
     fontSize: 14,
     lineHeight: '18',
+    width: '100%',
   },
   reportText: {
     color: COLORS.gray,

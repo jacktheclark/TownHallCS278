@@ -18,7 +18,8 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
         }
         if (data) {
           //data in increasing order of age (newest first)
-          setCommentList(data.reverse()); 
+          const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          setCommentList(sortedData); 
         }
       } catch (error) {
         setFetchError("Could not fetch");
@@ -62,7 +63,8 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
           return { ...comment, votes: updatedVoteCount };
         }
         return comment;
-      });
+      }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sort by creation date in descending order
+      
       setCommentList(updatedComments); // updating local commentslist to track
 
       // update my internal list of upvoted comments
