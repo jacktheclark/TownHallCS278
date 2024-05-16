@@ -2,11 +2,13 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS } from "../constants.js";
 import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const IndividualComment = ({ spec, author, content, specColor, setSpecColor, voteCount, onUpvote, onDownvote }) => {
   const [hasUpvoted, setHasUpvoted] = useState(false);
   const [hasDownvoted, setHasDownvoted] = useState(false);
   const [localVoteCount, setLocalVoteCount] = useState(0);
+  const [hasReported, setReported] = useState(false);
   
 
   const colorScale = [
@@ -73,26 +75,54 @@ const IndividualComment = ({ spec, author, content, specColor, setSpecColor, vot
     };
 
 
+    const handleReport = async () => {
+      if (!hasReported) {
+        setReported(true);
+      } else {
+        setReported(false);
+      }
+    };
+
+
   return (
     <View style={styles.bigContainer}>
-      <View style={styles.commentContainer}>
-        <Text style={[styles.author, {color: pickColor}]}>{author}</Text>
-        <Text style={styles.content}>{content}</Text>
+      <View style={styles.leftSideContainer}>
+            <View style={styles.commentContainer}>
+              <View style={styles.topPart}>
+                <Text style={[styles.author, {color: pickColor}]}>{author}</Text>
+                <TouchableOpacity style={styles.reportButton} onPress={handleReport}>
+                    <MaterialIcons name={hasReported ? "report" : "report-gmailerrorred"} size={20} 
+                      color={hasReported ? pickColor : COLORS.gray}  />
+                </TouchableOpacity>
+              </View>
+              
+              <Text style={styles.content}>{content}</Text>
+              
+            </View>
       </View>
+      
       
       <View style={styles.rightSideContainer}>
           <View style={styles.voteCountsContainer}>
             <Text style={[styles.voteCounts, {color: pickColor}]}>{localVoteCount}</Text>
           </View>
           <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={handleUpvote}>
-            <AntDesign name="up" size={24} color={hasUpvoted ? pickColor : COLORS.lightaccent} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDownvote}>
-            <AntDesign name="down" size={24} color={hasDownvoted ? pickColor : COLORS.lightaccent} />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={handleUpvote}>
+              <AntDesign name="up" size={24} color={hasUpvoted ? pickColor : COLORS.lightaccent} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleDownvote}>
+              <AntDesign name="down" size={24} color={hasDownvoted ? pickColor : COLORS.lightaccent} />
+            </TouchableOpacity>
           </View>
       </View>
+
+      {/* <View style={styles.bottomContainer}>
+          <TouchableOpacity style={styles.reportButton} onPress={handleReport}>
+                  <MaterialIcons name={hasReported ? "report" : "report-gmailerrorred"} size={24} 
+                    color={hasReported ? pickColor : COLORS.lightaccent}  />
+          </TouchableOpacity>
+      </View> */}
+      
     </View>
   );
 }
@@ -110,10 +140,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   commentContainer: {
+    // 
+  },
+  topPart: {
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  leftSideContainer: {
     padding: 10,
-    // borderBottomWidth: 1,
-    // borderBottomColor: COLORS.lightaccent,
     width: '76%',
+  },
+  reportButton: {
+    marginBottom: 4,
   },
   iconContainer: {
     padding: 10,
@@ -129,6 +168,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     borderRadius: 10,
   },
+  bottomContainer: {
+    
+  },
   voteCounts: {
     fontFamily: FONTS.bold,
     marginBottom: 5,
@@ -140,6 +182,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: COLORS.lightaccent,
     fontSize: 16,
+    marginRight: 6,
   },
   content: {
     color: COLORS.lightaccent,
@@ -147,6 +190,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: '18',
   },
+  reportText: {
+    color: COLORS.gray,
+    fontFamily: FONTS.body,
+    fontSize: 14,
+    lineHeight: '18',
+  }
 });
 
 export default IndividualComment;
