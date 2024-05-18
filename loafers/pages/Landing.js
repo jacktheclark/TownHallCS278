@@ -5,8 +5,10 @@ import { ADJECTIVES } from "../assets/adjectives.js";
 import { NOUNS } from "../assets/nouns.js";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Landing({ navigation }) {
+export default function Landing({ navigation, route }) {
   const [displayName, setDisplayName] = useState("");
+
+  const { xemail, xpassword } = route.params;
 
   const generateName = () => {
     const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
@@ -16,7 +18,7 @@ export default function Landing({ navigation }) {
   };
 
   const handlePressLogin = () => {
-    navigation.navigate("SignupScreen", { displayName });
+    navigation.navigate("SignupScreen", { xemail, xpassword, displayName });
     console.log("Pseudo chosen, proceeding to sign up with", displayName);
   };
 
