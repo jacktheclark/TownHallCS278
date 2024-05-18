@@ -82,6 +82,45 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
     }
   };
 
+  const handleReport = async (commentId) => {
+    try {
+      // get current report counts
+      const { data: commentData, error: commentError } = await supabase
+        .from("Comments")
+        .select("reports")
+        .eq('id', commentId)
+        .single();
+      if (commentError) {
+        throw commentError;
+      }
+  
+      // updated running report count
+      let updatedReportCount = commentData.reports;
+      updatedReportCount += 1; // add a report
+  
+      // update report count in db
+      const { data: updatedData, error: updateError } = await supabase
+        .from("Comments")
+        .update({ reports: updatedReportCount })
+        .eq('id', commentId);
+      if (updateError) {
+        throw updateError;
+      }
+  
+      // optionally, update the local state if needed
+      const updatedComments = commentList.map(comment => {
+        if (comment.id === commentId) {
+          return { ...comment, reports: updatedReportCount };
+        }
+        return comment;
+      }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sort by creation date in descending order
+      
+      setCommentList(updatedComments); // updating local comment list to track
+    } catch (error) {
+      console.error("Error updating report count:", error.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -97,6 +136,7 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
             voteCount={item.votes}
             onUpvote={() => handleVote(item.id, 1)} //1 is upvote
             onDownvote={() => handleVote(item.id, -1)} //-1 is downvote
+            onReport={() => handleReport(item.id)}
           />
         )}
         keyExtractor={(item, index) => index.toString()}

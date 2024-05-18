@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import { supabase, postComment } from "../Supabase.js";
 import { COLORS, FONTS } from "../constants.js";
 
 const Signup = ({ navigation, route }) => {
-  const { displayName } = route.params;
-  const [xemail, setEmail] = useState("");
-  const [xpassword, setPassword] = useState("");
+  const { xemail, xpassword, displayName } = route.params;
+  const [finalEmail, setEmail] = useState(xemail);
+  const [finalPass, setPassword] = useState(xpassword);
   const [error, setError] = useState(null);
 
   async function updateUserInfo() {
@@ -71,8 +71,8 @@ const Signup = ({ navigation, route }) => {
   async function signUpNewUser() {
     try {
       const { data, error } = await supabase.auth.signUp({
-        email: xemail,
-        password: xpassword,
+        email: finalEmail,
+        password: finalPass,
         options: {
           data: {
             first_name: displayName,
@@ -93,13 +93,9 @@ const Signup = ({ navigation, route }) => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        justifyContent: "start",
-        alignItems: "center",
-        backgroundColor: COLORS.dark,
-      }}
+      style={styles.container}
     >
+      <Text style={styles.instructionsText}>Nice to meet you, {displayName}! Please finish signing up to continue.</Text>
       <View
         style={{
           height: 50,
@@ -117,45 +113,73 @@ const Signup = ({ navigation, route }) => {
           color: COLORS.lightaccent,
         }}
         onChangeText={(text) => setEmail(text)}
-        value={xemail}
+        value={finalEmail}
         placeholder="Email"
         autoCapitalize="none"
       />
       <TextInput
-        style={{
-          height: 40,
-          width: 300,
-          borderColor: COLORS.lightaccent,
-          borderWidth: 1,
-          marginBottom: 20,
-          paddingHorizontal: 10,
-          borderRadius: 10,
-          color: COLORS.lightaccent,
-        }}
+        style={styles.input}
         onChangeText={(text) => setPassword(text)}
-        value={xpassword}
+        value={finalPass}
         placeholder="Password"
         secureTextEntry
       />
       {error && <Text style={{ color: "red" }}>{error}</Text>}
       <TouchableOpacity
         onPress={signUpNewUser}
-        style={{
-          width: 300,
-          height: 40,
-          backgroundColor: COLORS.lightaccent,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 10,
-        }}
+        style={styles.loginButton}
       >
-        <Text style={{ color: COLORS.dark, fontSize: 25 }}>
+        <Text style={styles.loginButtonText}>
           Sign Up & Sign In
         </Text>
       </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "start",
+    backgroundColor: COLORS.dark,
+  },
+  input: {
+    height: 40,
+    width: 300,
+    borderColor: COLORS.lightaccent,
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    color: COLORS.lightaccent,
+  },
+  loginButton: {
+    backgroundColor: COLORS.lightaccent,
+    borderRadius: 25,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginBottom: 20,
+  },
+  loginButtonText: {
+    color: COLORS.dark,
+    textAlign: "center",
+  },
+  suButtonText: {
+    color: COLORS.lightaccent,
+    fontFamily: FONTS.body,
+    textAlign: "center",
+  },
+  instructionsText: {
+    // alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    fontSize: 20,
+    fontFamily: FONTS.bold,
+    color: COLORS.lightaccent,
+    marginTop: 60,
+  },
+});
+
 
 export default Signup;

@@ -95,10 +95,10 @@ const Auth = ({ navigation, route }) => {
       </Pressable>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("LandingScreen")}
+        onPress={() => navigation.navigate("LandingScreen", { xemail, xpassword })}
         style={styles.suButton}
       >
-        <Text style={styles.suButtonText}>Sign Up</Text>
+        <Text style={styles.suButtonText}>Sign Up Instead</Text>
       </TouchableOpacity>
       {/*  
       <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")}>
