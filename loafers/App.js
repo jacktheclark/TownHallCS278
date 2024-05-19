@@ -62,16 +62,17 @@ export default function App() {
           name="FeedScreen"
           component={Feed}
           options={{
-            title: "Question of the Day",
-            headerStyle: {
-              backgroundColor: COLORS.dark,
-            },
-            headerTintColor: COLORS.lightaccent,
-            headerTitleStyle: {
-              fontWeight: "bold",
-            },
-            fontFamily: FONTS.bold,
-            headerBackVisible: false,
+            headerShown: false,
+          //   title: "Question of the Day",
+          //   headerStyle: {
+          //     backgroundColor: COLORS.white,
+          //   },
+          //   headerTintColor: COLORS.lightaccent,
+          //   headerTitleStyle: {
+          //     fontWeight: "bold",
+          //   },
+          //   fontFamily: FONTS.bold,
+          //   headerBackVisible: false,
           }}
         />
         <Stack.Screen
