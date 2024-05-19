@@ -26,6 +26,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+// =======
+//     borderRadius: 8,
+//     padding: 16,
+//     marginBottom: 16,
+// >>>>>>> main
   },
   title: {
     fontSize: '20%',

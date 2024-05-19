@@ -7,7 +7,23 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
   const [comment, setComment] = useState('');
   const [user, setUser] = useState(null);
 
-  
+  // useEffect(() => {
+  //   // Fetch user pseudonym when the component mounts
+  //   const fetchUserPseudonym = async () => {
+  //     const { data: user, error } = await supabase
+  //       .from('UserInfo')
+  //       .select('pseudo')
+  //       .single(); // Assuming only one user is expected
+  //     if (error) {
+  //       console.error('Error fetching user:', error.message);
+  //       return;
+  //     }
+  //     setUser(user ? user.pseudo : 'BobJoe');
+  //   };
+  //   fetchUserPseudonym();
+  // }, []);
+
+
   const handleCommentChange = (text) => {
     setComment(text);
   };
@@ -15,7 +31,7 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
   const handleSubmit = async () => {
     const newComment = {
       spectrum: spectrumValue,
-      author: user ? user.pseudo : "Anonymous", // Check if user is available, use user.pseudo as author if available, otherwise set as "Anonymous"
+      author: user ? "Anonymous" : displayName, //NOT WORKING YET
       content: comment,
     };
     const response = await postComment(newComment);
@@ -51,7 +67,7 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%", // Set width to 100%
+    width: "100%",
   },
   input: {
     height: '30%',

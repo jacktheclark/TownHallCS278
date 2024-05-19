@@ -5,8 +5,10 @@ import { ADJECTIVES } from "../assets/adjectives.js";
 import { NOUNS } from "../assets/nouns.js";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Landing({ navigation }) {
+export default function Landing({ navigation, route }) {
   const [displayName, setDisplayName] = useState("");
+
+  const { xemail, xpassword } = route.params;
 
   const generateName = () => {
     const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
@@ -16,7 +18,7 @@ export default function Landing({ navigation }) {
   };
 
   const handlePressLogin = () => {
-    navigation.navigate("SignupScreen", { displayName });
+    navigation.navigate("SignupScreen", { xemail, xpassword, displayName });
     console.log("Pseudo chosen, proceeding to sign up with", displayName);
   };
 
@@ -47,7 +49,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: COLORS.dark,
-    // borderRadius: 20,
   },
   instructionsText: {
     alignItems: "center",
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: FONTS.bold,
     color: COLORS.lightaccent,
-    marginTop: 60, // Move the instructions towards the top
+    marginTop: 60,
   },
   subtitleText: {
     textAlign: "center",
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.medium,
     color: COLORS.lightaccent,
-    marginTop: 70, // Move the instructions towards the top
+    marginTop: 70,
   },
   row: {
     flexDirection: "row",

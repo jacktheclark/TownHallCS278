@@ -37,8 +37,10 @@ const Auth = ({ navigation, route }) => {
       }
 
       if (userData) {
-        setDisplayName(userData.pseudo);
         console.log(userData.pseudo);
+        return userData.pseudo; // Return the pseudo
+      } else {
+        return ""; // Handle the case where userData might be null
       }
     } catch (error) {
       console.error("Error updating user info:", error.message);
@@ -54,8 +56,10 @@ const Auth = ({ navigation, route }) => {
       if (error) {
         setError(error.message);
       } else {
-        await updateUserInfo();
-        navigation.navigate("FeedScreen", { displayName });
+        // await updateUserInfo();
+        const pseudo = await updateUserInfo(); // Fetch and return pseudo
+        // console.error("Display Name before navigate:", displayName);
+        navigation.navigate("FeedScreen", { displayName: pseudo });
         console.log("Logged in");
       }
     } catch (error) {
@@ -91,10 +95,10 @@ const Auth = ({ navigation, route }) => {
       </Pressable>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("LandingScreen")}
+        onPress={() => navigation.navigate("LandingScreen", { xemail, xpassword })}
         style={styles.suButton}
       >
-        <Text style={styles.suButtonText}>Sign Up</Text>
+        <Text style={styles.suButtonText}>Sign Up Instead</Text>
       </TouchableOpacity>
       {/*  
       <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")}>
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: FONTS.bold,
     color: COLORS.lightaccent,
-    marginTop: 60, // Move the instructions towards the top
+    marginTop: 60,
   },
 });
 
