@@ -70,34 +70,6 @@ export default function Feed({ navigation, route }) {
         )}
       </View>
 
-// =======
-//       <DiscussionTopic question={`What do you think of the new Stanford president hiring, ${displayName}?`} />
-//       <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
-//         specColor={specColor} setSpecColor={setSpecColor}/>
-//       {hasCommented ? (
-//         <View style={styles.lilContainer}>
-//           <FilterButtons specColor={specColor} 
-//             sortOption={sortOption}
-//             setSortOption={setSortOption}/>
-//           {sortOption === 'New' ? (
-//               <CommentsFeedNew specColor={specColor} setSpecColor={setSpecColor} />
-//           ) : sortOption === 'Hot' ? (
-//               <CommentsFeedHot specColor={specColor} setSpecColor={setSpecColor} />
-//           ) : sortOption === 'Similar' ? (
-//               <CommentsFeedSimilar specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
-//           ) : (
-//               <CommentsFeedDis specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
-//           )}
-//         </View>
-//       ) : (
-//         <WriteComment 
-//         displayName = {displayName}
-//         spectrumValue={spectrumValue} 
-//         setSpectrumValue={setSpectrumValue}
-//         hasCommented={hasCommented} 
-//         showComments={showComments} />
-//       )}
-// >>>>>>> main
     </View>
   );
 }
@@ -142,3 +114,34 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
 });
+
+
+
+// =======
+//       <DiscussionTopic question={`What do you think of the new Stanford president hiring, ${displayName}?`} />
+//       <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
+//         specColor={specColor} setSpecColor={setSpecColor}/>
+//       {hasCommented ? (
+//         <View style={styles.lilContainer}>
+//           <FilterButtons specColor={specColor} 
+//             sortOption={sortOption}
+//             setSortOption={setSortOption}/>
+//           {sortOption === 'New' ? (
+//               <CommentsFeedNew specColor={specColor} setSpecColor={setSpecColor} />
+//           ) : sortOption === 'Hot' ? (
+//               <CommentsFeedHot specColor={specColor} setSpecColor={setSpecColor} />
+//           ) : sortOption === 'Similar' ? (
+//               <CommentsFeedSimilar specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
+//           ) : (
+//               <CommentsFeedDis specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
+//           )}
+//         </View>
+//       ) : (
+//         <WriteComment 
+//         displayName = {displayName}
+//         spectrumValue={spectrumValue} 
+//         setSpectrumValue={setSpectrumValue}
+//         hasCommented={hasCommented} 
+//         showComments={showComments} />
+//       )}
+// >>>>>>> main
