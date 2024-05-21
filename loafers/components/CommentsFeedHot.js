@@ -7,6 +7,7 @@ import { supabase, postComment } from "../Supabase.js";
 const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [commentList, setCommentList] = useState(null);
+  //Need to change this to fetch from supabase based on user
   const [upvotedComments, setUpvotedComments] = useState([]);
 
   useEffect(() => {
@@ -34,34 +35,91 @@ const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
 
   const handleVote = async (commentId, upOrDown) => {
     try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      //console.log("feedie user:", user.id);
+      //console.log("feedie comment", commentId);
       // get current vote counts
       const { data: commentData, error: commentError } = await supabase
         .from("Comments")
         .select("votes")
-        .eq('id', commentId)
+        .eq("id", commentId)
         .single();
       if (commentError) {
         throw commentError;
       }
-      // local state to check what they've already uploaded
+      // local state to check what they've already upvoted
       const isUpvoted = upvotedComments.includes(commentId);
       // updated running vote count
       let updatedVoteCount = commentData.votes;
       if (upOrDown === 1) {
         updatedVoteCount += isUpvoted ? -1 : 1; // dec if already upvoted, otherwise increment
+        if (!isUpvoted) {
+          const { data: insertedData, error: insertError } = await supabase
+            .from("Upvote")
+            .upsert(
+              [
+                {
+                  user: user.id,
+                  commentid: commentId,
+                  state: 1, // 1 for upvote
+                },
+              ],
+              { onConflict: ["user", "commentid"] } // Specify the columns for conflict resolution
+            );
+
+          if (insertError) {
+            throw insertError;
+          }
+        }
+        if (isUpvoted) {
+          const { data: insertedData, error: insertError } = await supabase
+            .from("Upvote")
+            .upsert(
+              [
+                {
+                  user: user.id,
+                  commentid: commentId,
+                  state: 0, // 1 for upvote
+                },
+              ],
+              { onConflict: ["user", "commentid"] } // Specify the columns for conflict resolution
+            );
+
+          if (insertError) {
+            throw insertError;
+          }
+        }
       } else {
         updatedVoteCount -= 1; // dec for downvote
+        const { data: insertedData, error: insertError } = await supabase
+          .from("Upvote")
+          .upsert(
+            [
+              {
+                user: user.id,
+                commentid: commentId,
+                state: 2, // 1 for upvote
+              },
+            ],
+            { onConflict: ["user", "commentid"] } // Specify the columns for conflict resolution
+          );
+
+        if (insertError) {
+          throw insertError;
+        }
       }
       //update vote count in db
       const { data: updatedData, error: updateError } = await supabase
         .from("Comments")
         .update({ votes: updatedVoteCount })
-        .eq('id', commentId);
+        .eq("id", commentId);
       if (updateError) {
         throw updateError;
       }
       // upvote vote count in local
-      const updatedComments = commentList.map(comment => {
+      const updatedComments = commentList.map((comment) => {
         if (comment.id === commentId) {
           return { ...comment, votes: updatedVoteCount };
         }
@@ -73,10 +131,13 @@ const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
       if (upOrDown === 1) {
         if (isUpvoted) {
           // already upvoted, so remove it from the comment list
-          setUpvotedComments(prevState => prevState.filter(id => id !== commentId));
+          setUpvotedComments((prevState) =>
+            prevState.filter((id) => id !== commentId)
+          );
         } else {
           // not already upvoted, so add this comment to the comment list
-          setUpvotedComments(prevState => [...prevState, commentId]);
+
+          setUpvotedComments((prevState) => [...prevState, commentId]);
         }
       }
     } catch (error) {
