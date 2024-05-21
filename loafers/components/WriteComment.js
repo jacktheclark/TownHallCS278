@@ -1,10 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { COLORS, FONTS } from "../constants.js";
-import { supabase, postComment } from '../Supabase.js';
+import { supabase, postComment } from "../Supabase.js";
 
-const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasCommented, showComments }) => {
-  const [comment, setComment] = useState('');
+const WriteComment = ({
+  displayName,
+  spectrumValue,
+  setSpectrumValue,
+  hasCommented,
+  showComments,
+}) => {
+  const [comment, setComment] = useState("");
   const [user, setUser] = useState(null);
 
   // useEffect(() => {
@@ -23,7 +37,6 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
   //   fetchUserPseudonym();
   // }, []);
 
-
   const handleCommentChange = (text) => {
     setComment(text);
   };
@@ -35,13 +48,13 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
       content: comment,
     };
     const response = await postComment(newComment);
-    setComment('');
+    setComment("");
     showComments(true);
     if (response) {
-      setComment('');
+      setComment("");
       showComments(true);
     }
-    setComment('');
+    setComment("");
     showComments(true);
   };
 
@@ -49,10 +62,11 @@ const WriteComment = ({ displayName, spectrumValue, setSpectrumValue, hasComment
     <View style={styles.container}>
       <TextInput
         style={styles.input}
+        multiline={true}
+        textAlignVertical="top"
         value={comment}
         onChangeText={handleCommentChange}
         placeholder="Write your comment..."
-        multiline
       />
       <TouchableOpacity
         onPress={handleSubmit}
@@ -70,10 +84,10 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   input: {
-    height: '30%',
-    borderColor: 'white',
+    height: "30%",
+    borderColor: "white",
     color: COLORS.lightaccent,
-    backgroundColor: 'gray',
+    backgroundColor: "gray",
     // fontColor: COLORS.white,
     fontFamily: FONTS.body,
     fontSize: 16,
@@ -81,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
-    marginTop: '10%',
+    marginTop: "10%",
     // marginRight: '10%',
     // marginLeft: 10,
   },
@@ -91,17 +105,16 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 15,
     paddingHorizontal: 30,
-    marginLeft: '20%',
-    marginRight: '20%',
+    marginLeft: "20%",
+    marginRight: "20%",
     // marginBottom: 20,
-    marginTop: '10%',
+    marginTop: "10%",
   },
   submitResponseButtonText: {
     color: COLORS.dark,
     textAlign: "center",
     fontFamily: FONTS.bold,
-    fontSize: '20%',
-
+    fontSize: "20%",
   },
 });
 
