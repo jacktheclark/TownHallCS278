@@ -5,10 +5,24 @@ import { supabase } from "../Supabase.js";
 
 const CommentsFeedDis = ({ specValue, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
-  const [commentList, setCommentList] = useState(null);
-  const [upvotedComments, setUpvotedComments] = useState([]);
+  const [commentList, setCommentList] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
+    const fetchUserId = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        setUserId(user.id);
+        console.log("setting user id", user.id);
+      } else {
+        console.log("Error fetching user:", error);
+      }
+    };
+
     const fetchComments = async () => {
       try {
         const { data, error } = await supabase.from("Comments").select();
@@ -16,8 +30,13 @@ const CommentsFeedDis = ({ specValue, specColor, setSpecColor }) => {
           throw error;
         }
         if (data) {
-          // distance in decreasing order
-          const sortedComments = data.sort((a, b) => Math.abs(a.spectrum - specValue) - Math.abs(b.spectrum - specValue)).reverse();
+          const sortedComments = data
+            .sort(
+              (a, b) =>
+                Math.abs(a.spectrum - specValue) -
+                Math.abs(b.spectrum - specValue)
+            )
+            .reverse();
           setCommentList(sortedComments);
         }
       } catch (error) {
@@ -25,58 +44,88 @@ const CommentsFeedDis = ({ specValue, specColor, setSpecColor }) => {
         console.log(error);
       }
     };
+
+    fetchUserId();
     fetchComments();
   }, [specValue]);
 
   const handleVote = async (commentId, upOrDown) => {
     try {
-      // get current vote counts
       const { data: commentData, error: commentError } = await supabase
         .from("Comments")
         .select("votes")
-        .eq('id', commentId)
+        .eq("id", commentId)
         .single();
       if (commentError) {
         throw commentError;
       }
-      // local state to check what they've already uploaded
-      const isUpvoted = upvotedComments.includes(commentId);
-      // updated running vote count
-      let updatedVoteCount = commentData.votes;
-      if (upOrDown === 1) {
-        updatedVoteCount += isUpvoted ? -1 : 1; // dec if already upvoted, otherwise increment
-      } else {
-        updatedVoteCount -= 1; // dec for downvote
-      }
-      //update vote count in db
-      const { data: updatedData, error: updateError } = await supabase
+
+      let updatedVoteCount = commentData.votes + upOrDown;
+
+      const { error: updateCommentError } = await supabase
         .from("Comments")
         .update({ votes: updatedVoteCount })
-        .eq('id', commentId);
+        .eq("id", commentId);
+      if (updateCommentError) {
+        throw updateCommentError;
+      }
+
+      const updatedComments = commentList
+        .map((comment) => {
+          if (comment.id === commentId) {
+            return { ...comment, votes: updatedVoteCount };
+          }
+          return comment;
+        })
+        .sort(
+          (a, b) =>
+            Math.abs(a.spectrum - specValue) - Math.abs(b.spectrum - specValue)
+        )
+        .reverse();
+
+      setCommentList(updatedComments);
+    } catch (error) {
+      console.error("Error updating vote count:", error.message);
+    }
+  };
+
+  const handleReport = async (commentId) => {
+    try {
+      const { data: commentData, error: commentError } = await supabase
+        .from("Comments")
+        .select("reports")
+        .eq("id", commentId)
+        .single();
+      if (commentError) {
+        throw commentError;
+      }
+
+      let updatedReportCount = commentData.reports + 1;
+
+      const { error: updateError } = await supabase
+        .from("Comments")
+        .update({ reports: updatedReportCount })
+        .eq("id", commentId);
       if (updateError) {
         throw updateError;
       }
-      // upvote vote count in local
-      const updatedComments = commentList.map(comment => {
-        if (comment.id === commentId) {
-          return { ...comment, votes: updatedVoteCount };
-        }
-        return comment;
-      });
-      setCommentList(updatedComments); // updating local commentslist to track
 
-      // update my internal list of upvoted comments
-      if (upOrDown === 1) {
-        if (isUpvoted) {
-          // already upvoted, so remove it from the comment list
-          setUpvotedComments(prevState => prevState.filter(id => id !== commentId));
-        } else {
-          // not already upvoted, so add this comment to the comment list
-          setUpvotedComments(prevState => [...prevState, commentId]);
-        }
-      }
+      const updatedComments = commentList
+        .map((comment) => {
+          if (comment.id === commentId) {
+            return { ...comment, reports: updatedReportCount };
+          }
+          return comment;
+        })
+        .sort(
+          (a, b) =>
+            Math.abs(a.spectrum - specValue) - Math.abs(b.spectrum - specValue)
+        )
+        .reverse();
+
+      setCommentList(updatedComments);
     } catch (error) {
-      console.error("Error updating vote count:", error.message);
+      console.error("Error updating report count:", error.message);
     }
   };
 
@@ -89,12 +138,15 @@ const CommentsFeedDis = ({ specValue, specColor, setSpecColor }) => {
           <Comment
             spec={item.spectrum}
             author={item.author}
+            id={item.id}
             content={item.content}
             specColor={specColor}
             setSpecColor={setSpecColor}
             voteCount={item.votes}
             onUpvote={() => handleVote(item.id, 1)}
             onDownvote={() => handleVote(item.id, -1)}
+            onReport={() => handleReport(item.id)}
+            userId={userId}
           />
         )}
         keyExtractor={(item, index) => index.toString()}
