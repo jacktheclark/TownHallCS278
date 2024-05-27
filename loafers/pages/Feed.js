@@ -46,6 +46,7 @@ export default function Feed({ navigation, route }) {
   }, [spectrumValue]); // re-run if spectrumvalue changes
 
   return (
+<<<<<<< Updated upstream
     <>
       {hasCommented ? (
         <View style={styles.container}>
@@ -130,6 +131,62 @@ export default function Feed({ navigation, route }) {
         </TouchableWithoutFeedback>
       )}
     </>
+=======
+    <View style={styles.container}>
+      <ImageBackground source={require('../assets/backgroundImage.jpeg')} style={styles.header}>
+
+        {/* <View style={styles.bodyContainer}>
+          <DiscussionTopic question={`What do you think of the new Stanford president hiring, ${displayName}?`} />
+          <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
+            specColor={specColor} setSpecColor={setSpecColor}/>
+     */}
+       
+      
+          {hasCommented ? (
+            <View style={styles.bodyContainer}>
+              <DiscussionTopic question={`What do you think of the new Stanford president hiring, ${displayName}?`} />
+              {/* <View style={styles.sliderContainer}> */}
+                <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
+                  specColor={specColor} setSpecColor={setSpecColor}/>
+              {/* </View> */}
+              <View style={styles.feedContainer}>
+                <View style={styles.buttonsContainer}>
+                  <FilterButtons specColor={specColor} 
+                    sortOption={sortOption}
+                    setSortOption={setSortOption}/>
+                </View>
+                <View style={styles.commentsContainer}>
+                  {sortOption === 'New' ? (
+                      <CommentsFeedNew specColor={specColor} setSpecColor={setSpecColor} />
+                  ) : sortOption === 'Hot' ? (
+                      <CommentsFeedHot specColor={specColor} setSpecColor={setSpecColor} />
+                  ) : sortOption === 'Similar' ? (
+                      <CommentsFeedSimilar specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
+                  ) : (
+                      <CommentsFeedDis specValue={spectrumValue} specColor={specColor} setSpecColor={setSpecColor}/>
+                  )}
+                </View>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.bodyContainer}>
+              <DiscussionTopic question={`What do you think of the new Stanford president hiring, ${displayName}?`} />
+              {/* <View style={styles.sliderContainer}> */}
+                <SliderComponent spectrumValue={spectrumValue} setSpectrumValue={setSpectrumValue}
+                  specColor={specColor} setSpecColor={setSpecColor}/>
+              {/* </View> */}
+                <WriteComment 
+                displayName = {displayName}
+                spectrumValue={spectrumValue} 
+                setSpectrumValue={setSpectrumValue}
+                hasCommented={hasCommented} 
+                showComments={showComments} />
+            </View>
+          )}
+        {/* </View> */}
+      </ImageBackground>
+    </View>
+>>>>>>> Stashed changes
   );
 }
 
@@ -137,6 +194,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    width: '100%',
+    height: '100%',
     backgroundColor: COLORS.background_dark,
   },
   header: {
@@ -149,9 +208,15 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     // flex: 1,
+<<<<<<< Updated upstream
     position: "absolute",
     top: "12%",
     backgroundColor: COLORS.dark,
+=======
+    position: 'absolute',
+    top: '12%',
+    backgroundColor: COLORS.background_dark,
+>>>>>>> Stashed changes
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     width: "100%",
@@ -159,8 +224,22 @@ const styles = StyleSheet.create({
     padding: "5%",
     // textAlign: 'left',
   },
-  lilContainer: {
+  sliderContainer: {
     flex: 1,
+  },
+  feedContainer: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    backgroundColor: COLORS.background_dark,
+  },
+  buttonsContainer: {
+    // flex: 1,
+    backgroundColor: COLORS.white,
+  },
+  commentsContainer: {
+    flex: 1,
+    backgroundColor: 'blue',
   },
   testText: {
     marginTop: 100,
