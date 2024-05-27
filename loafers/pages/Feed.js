@@ -24,6 +24,7 @@ export default function Feed({ navigation, route }) {
   const { displayName } = route.params;
   const [hasCommented, showComments] = useState(false);
   const [spectrumValue, setSpectrumValue] = useState(5);
+  const [avgSpectrum, setAvgSpectrum] = useState(null);
   const [specColor, setSpecColor] = useState(null);
   const [sortOption, setSortOption] = useState("New");
 
@@ -45,6 +46,7 @@ export default function Feed({ navigation, route }) {
     setSpecColor(colorVec[Math.round(spectrumValue)]);
   }, [spectrumValue]); // re-run if spectrumvalue changes
 
+
   return (
 <<<<<<< Updated upstream
     <>
@@ -64,6 +66,7 @@ export default function Feed({ navigation, route }) {
               setSpectrumValue={setSpectrumValue}
               specColor={specColor}
               setSpecColor={setSpecColor}
+              hasCommented={hasCommented}
             />
             <View style={styles.lilContainer}>
               <FilterButtons
@@ -117,12 +120,14 @@ export default function Feed({ navigation, route }) {
                 setSpectrumValue={setSpectrumValue}
                 specColor={specColor}
                 setSpecColor={setSpecColor}
+                hasCommented={hasCommented}
               />
 
               <WriteComment
                 displayName={displayName}
                 spectrumValue={spectrumValue}
                 setSpectrumValue={setSpectrumValue}
+                setAvgSpectrum={setAvgSpectrum}
                 hasCommented={hasCommented}
                 showComments={showComments}
               />
