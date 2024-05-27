@@ -6,8 +6,12 @@ import Slider from '@react-native-community/slider';
 import supabase from "../Supabase.js";
 
 
-const SliderComponent = ({spectrumValue, setSpectrumValue, specColor, setSpecColor}) => {
+const SliderComponent = ({spectrumValue, setSpectrumValue, specColor, setSpecColor, hasCommented}) => {
 
+  // console.log(spectrumValue);
+  // useEffect(() => {
+  //   console.log(spectrumValue);
+  // }, [spectrumValue]);
 
   const spectrumChanger = (value) => {
       setSpectrumValue(value);
@@ -29,8 +33,12 @@ const SliderComponent = ({spectrumValue, setSpectrumValue, specColor, setSpecCol
         value={spectrumValue}
         onValueChange={spectrumChanger}
         thumbTintColor={specColor}
-
+        // disabled={hasCommented}
+        
         />
+        {hasCommented && (
+          <View style={styles.overlay}/>
+        )}
     </View>
   );
 };
@@ -55,6 +63,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '80%',
     marginBottom: 10,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+    zIndex: 1,
   }
 });
 

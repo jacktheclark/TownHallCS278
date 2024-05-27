@@ -15,6 +15,7 @@ const WriteComment = ({
   displayName,
   spectrumValue,
   setSpectrumValue,
+  setAvgSpectrum,
   hasCommented,
   showComments,
 }) => {
@@ -37,11 +38,32 @@ const WriteComment = ({
   //   fetchUserPseudonym();
   // }, []);
 
+  // useEffect(() => {
+  //   getAggregate().then(avg => setSpectrumValue(avg));
+  // },[hasCommented])
+
+  const getAggregate = async () => {
+    const { data, error } = await supabase
+      .from("Comments")
+      .select("spectrum")
+      // .eq("spectrum", spectrumValue);
+    if (error) {
+      console.error("Error fetching comments:", error.message);
+      return Null;
+    }
+    const sum = data.reduce((acc, obj) => acc + obj.spectrum, 0);
+    const average = sum / data.length;
+    console.log(average);
+    // return data[0].avg;
+    return average;
+  };
+
   const handleCommentChange = (text) => {
     setComment(text);
   };
 
   const handleSubmit = async () => {
+    getAggregate().then(avg => setSpectrumValue(avg));
     const newComment = {
       spectrum: spectrumValue,
       author: user ? "Anonymous" : displayName, //NOT WORKING YET
