@@ -8,6 +8,7 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [commentList, setCommentList] = useState([]);
   const [userId, setUserId] = useState(null);
+  const dayOfWeek = new Date().getDay();
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -23,9 +24,13 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
         console.log("Error fetching user:", error);
       }
     };
+
     const fetchComments = async () => {
       try {
-        const { data, error } = await supabase.from("Comments").select();
+        const { data, error } = await supabase
+          .from("Comments")
+          .select()
+          .eq("post", dayOfWeek);
         if (error) {
           throw error;
         }
@@ -41,6 +46,7 @@ const CommentsFeedNew = ({ comments, specColor, setSpecColor }) => {
       }
     };
 
+    fetchUserId();
     fetchComments();
   }, []);
 
