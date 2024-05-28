@@ -26,10 +26,13 @@ const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
 
     const fetchComments = async () => {
       try {
+        const dayOfWeek = new Date().getDay(); // Get the current day of the week
         const { data, error } = await supabase
           .from("Comments")
           .select()
+          .eq("post", dayOfWeek) // Filter by current day of the week
           .order("votes", { ascending: false }); // Sort by votes in descending order
+
         if (error) {
           throw error;
         }
