@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { COLORS, FONTS } from "../constants.js";
-
+import { supabase, postComment } from "../Supabase.js";
 
 const DiscussionTopic = ({ question }) => {
   return (
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   container: {
     // borderRadius: 8,
     width: "100%",
-    padding: '10%',
-    marginBottom: '10%',
+    padding: "10%",
+    marginBottom: "10%",
     // backgroundColor: COLORS.white,
     shadowOffset: {
       width: 0,
@@ -26,14 +26,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-// =======
-//     borderRadius: 8,
-//     padding: 16,
-//     marginBottom: 16,
-// >>>>>>> main
+    // =======
+    //     borderRadius: 8,
+    //     padding: 16,
+    //     marginBottom: 16,
+    // >>>>>>> main
   },
   title: {
-    fontSize: '20%',
+    fontSize: "20%",
     fontFamily: FONTS.bold,
     // marginBottom: 8,
     textAlign: "left",
