@@ -10,7 +10,7 @@ import {
 import { COLORS, FONTS } from "../constants.js";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { supabase } from "../Supabase.js";
+import { supabase, postComment } from "../Supabase.js";
 
 const IndividualComment = ({
   spec,
