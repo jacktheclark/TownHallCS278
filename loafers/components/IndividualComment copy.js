@@ -12,8 +12,6 @@ import {
 import { COLORS, FONTS } from "../constants.js";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { supabase, fetchReplies, postReply } from "../Supabase.js"; // Adjust path as necessary
-
 
 const IndividualComment = ({
   spec,
@@ -66,24 +64,26 @@ const IndividualComment = ({
   const ReplyInput = ({ setReplies }) => {
     const [replyText, setReplyText] = useState("");
 
-    const submitReply = async () => {
-      if (!replyText.trim()) return; // Prevent empty replies
-
-      const reply = {
-        comment_id: id,
-        author: author,  // Assuming author name is passed correctly to the component
+    const submitReply = () => {
+      const newReply = {
+        id: replies.length + 1,  // Ensure unique IDs
+        author: author,  // Use the author name from state
         content: replyText
       };
 
-      const newReply = await postReply(reply);
-      if (newReply) {
-        setReplies(currentReplies => [...currentReplies, newReply[0]]);
-        setReplyText("");
+      // Update the replies state and adjust the container height
+      setReplies(replies => {
+        const newReplies = [...replies, newReply];
+        // Only update height if the comment is currently expanded
         if (isExpanded) {
-          const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
+          const newHeight = baseHeight + (newReplies.length * replyHeight) + textInputHeight;
           animateHeight(newHeight);
         }
-      }
+        return newReplies;
+      });
+
+      // Clear the input field
+      setReplyText("");
     };
 
     return (
@@ -136,30 +136,6 @@ const IndividualComment = ({
     "#ff9200", //orange
     "#f94106", //red/orange
   ];
-
-  useEffect(() => {
-    const loadReplies = async () => {
-      const fetchedReplies = await fetchReplies(id);
-      if (fetchedReplies) {
-        setReplies(fetchedReplies);
-      }
-    };
-
-    loadReplies();
-  }, [id]);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: user, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching user:', error);
-      } else if (user) {
-        setUserId(user.id);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   useEffect(() => {
     const fetchUserId = async () => {

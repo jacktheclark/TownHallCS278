@@ -29,4 +29,38 @@ const postComment = async (comment) => {
   }
 };
 
-export { supabase, postComment };
+// Function to post a new reply
+const postReply = async (reply) => {
+  try {
+    const { data, error } = await supabase.from('Replies').insert([reply]);
+    if (error) {
+      console.error('Error posting reply:', error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.error('Error posting reply:', error.message);
+    return null;
+  }
+};
+
+// Function to fetch replies for a specific comment
+const fetchReplies = async (commentId) => {
+  try {
+    const { data, error } = await supabase
+      .from('Replies')
+      .select('*')
+      .eq('comment_id', commentId);
+
+    if (error) {
+      console.error('Error fetching replies:', error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.error('Error fetching replies:', error.message);
+    return null;
+  }
+};
+
+export { supabase, postComment, postReply, fetchReplies };
