@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  TextInput,
+  Animated,
 } from "react-native";
 import { COLORS, FONTS } from "../constants.js";
 import { AntDesign } from "@expo/vector-icons";
@@ -30,6 +32,97 @@ const IndividualComment = ({
   const [hasReported, setReported] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [height, setHeight] = useState(new Animated.Value(100));
+  const baseHeight = 100; // Base height for the comment itself
+  const replyHeight = 53; // Estimated height per reply
+  const textInputHeight = 65; // Height of the reply input
+  const [replies, setReplies] = useState([
+    { id: 1, author: "Lebron James", content: "This is a reply." },
+    // { id: 2, author: "John Smith", content: "Another insightful reply!" },
+    { id: 2, author: "Jack Clark", content: "Lebron James" },
+  ]);
+
+  const calculateFullHeight = () => {
+    return baseHeight + (replies.length * replyHeight) + textInputHeight;
+  };
+
+  const animateHeight = (targetHeight) => {
+    Animated.timing(height, {
+      toValue: targetHeight,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const toggleExpansion = () => {
+    let targetHeight = isExpanded ? 100 : calculateFullHeight();
+    animateHeight(targetHeight);
+    setIsExpanded(!isExpanded);
+  };
+
+  const ReplyInput = ({ setReplies }) => {
+    const [replyText, setReplyText] = useState("");
+
+    const submitReply = () => {
+      const newReply = {
+        id: replies.length + 1,  // Ensure unique IDs
+        author: author,  // Use the author name from state
+        content: replyText
+      };
+
+      // Update the replies state and adjust the container height
+      setReplies(replies => {
+        const newReplies = [...replies, newReply];
+        // Only update height if the comment is currently expanded
+        if (isExpanded) {
+          const newHeight = baseHeight + (newReplies.length * replyHeight) + textInputHeight;
+          animateHeight(newHeight);
+        }
+        return newReplies;
+      });
+
+      // Clear the input field
+      setReplyText("");
+    };
+
+    return (
+      <View style={styles.replyInputContainer}>
+        <TextInput
+          style={styles.replyTextInput}
+          onChangeText={setReplyText}
+          value={replyText}
+          placeholder="Type your reply..."
+          placeholderTextColor={COLORS.gray}
+        />
+        <TouchableOpacity
+          style={styles.replyButton}
+          onPress={submitReply}
+        >
+          <Text style={styles.replyButtonText}>Reply</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  useEffect(() => {
+    if (isExpanded) {
+      animateHeight(calculateFullHeight());
+    }
+  }, [replies]);
+
+  const renderReplies = () => (
+    <View>
+      {replies.map((reply) => (
+        <View key={reply.id} style={styles.replyContainer}>
+          <Text style={styles.replyAuthor}>{reply.author}</Text>
+          <Text style={styles.replyContent}>{reply.content}</Text>
+        </View>
+      ))}
+      <ReplyInput setReplies={setReplies} />
+    </View>
+  );
+
 
   const colorVec = [
     "#ff006c", //hotpink
@@ -184,87 +277,157 @@ const IndividualComment = ({
   };
 
   return (
-    <View style={styles.bigContainer}>
-      <View style={styles.leftSideContainer}>
-        <View style={styles.commentContainer}>
-          <View style={styles.topPart}>
-            <Text style={[styles.author, { color: pickColor }]}>{author}</Text>
-            <TouchableOpacity
-              style={styles.reportButton}
-              onPress={handleReport}
-            >
-              <MaterialIcons
-                name={hasReported ? "report" : "report-gmailerrorred"}
-                size={20}
-                color={hasReported ? pickColor : COLORS.gray}
-              />
+    <Animated.View style={[styles.biggerContainer, { height }]}>
+      <TouchableOpacity onPress={toggleExpansion}>
+        <View style={styles.bigContainer}>
+          <View style={styles.leftSideContainer}>
+            <TouchableOpacity onPress={toggleExpansion}>
+              <View style={styles.commentContainer}>
+                <View style={styles.topPart}>
+                  <Text style={[styles.author, { color: pickColor }]}>{author}</Text>
+                  <TouchableOpacity
+                    style={styles.reporftButton}
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      handleReport();
+                    }}
+                  >
+                    <MaterialIcons
+                      name={hasReported ? "report" : "report-gmailerrorred"}
+                      size={20}
+                      color={hasReported ? pickColor : COLORS.gray}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.replyCount}>
+                    {replies.length > 0 && (
+                      <>
+                        <Text style={styles.emoji}>🗨️</Text> {replies.length}
+                      </>
+                    )}
+                  </Text>
+                </View>
+                <Text style={styles.content}>{content}</Text>
+              </View>
             </TouchableOpacity>
           </View>
-          <Text style={styles.content}>{content}</Text>
-        </View>
-      </View>
-      <View style={styles.rightSideContainer}>
-        <View style={styles.voteCountsContainer}>
-          <Text style={[styles.voteCounts, { color: pickColor }]}>
-            {localVoteCount}
-          </Text>
-        </View>
-        <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={handleUpvote}>
-            <AntDesign
-              name="up"
-              size={24}
-              color={hasUpvoted ? pickColor : COLORS.lightaccent}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDownvote}>
-            <AntDesign
-              name="down"
-              size={24}
-              color={hasDownvoted ? pickColor : COLORS.lightaccent}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={modalVisible}
-        onRequestClose={cancelReport}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>
-              We take your safety seriously. Pressing accept will report this
-              comment and user to our moderation team.
-            </Text>
-            <View style={styles.modalButtons}>
-              <Pressable style={styles.confirmButton} onPress={confirmReport}>
-                <Text style={styles.confirmButtonText}>Yes, report</Text>
-              </Pressable>
-              <Pressable style={styles.cancelButton} onPress={cancelReport}>
-                <Text style={styles.cancelButtonText}>No thanks</Text>
-              </Pressable>
+          <View style={styles.rightSideContainer}>
+            <View style={styles.voteCountsContainer}>
+              <Text style={[styles.voteCounts, { color: pickColor }]}>
+                {localVoteCount}
+              </Text>
+            </View>
+            <View style={styles.iconContainer}>
+              <TouchableOpacity onPress={handleUpvote}>
+                <AntDesign
+                  name="up"
+                  size={24}
+                  color={hasUpvoted ? pickColor : COLORS.lightaccent}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleDownvote}>
+                <AntDesign
+                  name="down"
+                  size={24}
+                  color={hasDownvoted ? pickColor : COLORS.lightaccent}
+                />
+              </TouchableOpacity>
             </View>
           </View>
+
+          <Modal
+            transparent={true}
+            animationType="fade"
+            visible={modalVisible}
+            onRequestClose={cancelReport}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalText}>
+                  We take your safety seriously. Pressing accept will report this
+                  comment and user to our moderation team.
+                </Text>
+                <View style={styles.modalButtons}>
+                  <Pressable style={styles.confirmButton} onPress={confirmReport}>
+                    <Text style={styles.confirmButtonText}>Yes, report</Text>
+                  </Pressable>
+                  <Pressable style={styles.cancelButton} onPress={cancelReport}>
+                    <Text style={styles.cancelButtonText}>No thanks</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
-      </Modal>
-    </View>
+      </TouchableOpacity>
+      {isExpanded && renderReplies()}
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
+  replyCount: {
+    fontFamily: FONTS.bold,
+    fontSize: 14,
+    color: COLORS.lightaccent, // Assuming secondary color for contrast
+  },
+  emoji: {
+    fontSize: 16, // Emoji size
+  },
+  replyInputContainer: {
+    flexDirection: 'row',
+    padding: 10,
+    marginTop: 5,
+  },
+  replyTextInput: {
+    flex: 1,
+    padding: 8,
+    borderColor: COLORS.lightaccent,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginRight: 5,
+    color: COLORS.lightaccent,
+    backgroundColor: COLORS.lighter, // Assuming a lighter theme color for input
+  },
+  replyButton: {
+    backgroundColor: COLORS.primary, // Primary color for the button
+    padding: 10,
+    borderRadius: 5,
+  },
+  replyButtonText: {
+    color: COLORS.white, // Text color for button
+    fontWeight: 'bold',
+  },
   bigContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
+    // borderWidth: 1,
+    // borderColor: COLORS.lightaccent,
+    // marginBottom: 5,
+    // marginTop: 5,
+    // borderRadius: 10,
+  },
+  biggerContainer: {
+    flexDirection: "column",
     borderWidth: 1,
     borderColor: COLORS.lightaccent,
     marginBottom: 5,
     marginTop: 5,
     borderRadius: 10,
+  },
+  replyContainer: {
+    padding: 5,
+    marginVertical: 5,
+    borderRadius: 5,
+    marginHorizontal: 15,
+  },
+  replyAuthor: {
+    fontWeight: 'bold',
+    color: COLORS.lightaccent,
+  },
+  replyContent: {
+    color: COLORS.lightaccent,
   },
   commentContainer: {
     //
@@ -272,6 +435,7 @@ const styles = StyleSheet.create({
   topPart: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 6,
   },
   leftSideContainer: {
     padding: 10,
