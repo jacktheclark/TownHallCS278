@@ -65,60 +65,109 @@ const IndividualComment = ({
     setIsExpanded(!isExpanded);
   };
 
+  const postReplyAndUpdate = async (newReply) => {
+    const posted = await postReply(newReply);
+    if (posted) {
+      fetchReplies(newReply.comment_id).then(newReplies => {
+        setReplies(newReplies);
+      }).catch(error => console.error('Failed to fetch replies:', error));
+    }
+  };
+
+  // const handleClickComment = async (commentId) => {
+  //   // Toggle expansion state for the comment
+  //   toggleExpansion()
+
+  //   // Use the correct 'id' to filter and potentially fetch new replies
+  //   let repliesForComment = replies.filter(reply => reply.comment_id === commentId);
+
+  //   if (repliesForComment.length === 0) {
+  //     console.log("Fetching replies from the backend...");
+  //     try {
+  //       repliesForComment = await fetchReplies(commentId);
+  //       // Update the replies state with these new replies
+  //       setReplies(currentReplies => [...currentReplies, ...repliesForComment]);
+  //     } catch (error) {
+  //       console.error('Error fetching replies:', error);
+  //     }
+  //   }
+
+  //   console.log(`Replies for comment ID ${commentId}:`, repliesForComment);
+  // };
+
+  const handleClickComment = async (commentId) => {
+    // Toggle expansion state for the comment
+    toggleExpansion();
+
+    console.log("Fetching replies from the backend...");
+    try {
+      const repliesForComment = await fetchReplies(commentId);
+      console.log("fetched replies: ", repliesForComment)
+      // Update the replies state with these new replies
+      setReplies(currentReplies => {
+        // Filter out any previous replies for this commentId to avoid duplicates
+        const filteredCurrentReplies = currentReplies.filter(reply => reply.comment_id !== commentId);
+        return [...filteredCurrentReplies, ...repliesForComment];
+      });
+    } catch (error) {
+      console.error('Error fetching replies:', error);
+    }
+
+    console.log(`Replies fetched for comment ID ${commentId}.`);
+  };
+
   const ReplyInput = ({ setReplies }) => {
     const [replyText, setReplyText] = useState("");
+    const submitReply = async () => {
+      if (!replyText.trim()) return; // Prevent empty replies
+
+      const reply = {
+        comment_id: id,
+        author: author,  // Assuming author name is passed correctly to the component
+        content: replyText
+      };
+
+      const newReply = await postReply(reply);
+      if (newReply) {
+        setReplies(currentReplies => [...currentReplies, newReply[0]]);
+        setReplyText("");
+        if (isExpanded) {
+          const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
+          animateHeight(newHeight);
+        }
+      }
+    };
 
     // const submitReply = async () => {
     //   if (!replyText.trim()) return; // Prevent empty replies
 
     //   const reply = {
     //     comment_id: id,
-    //     author: author,  // Assuming author name is passed correctly to the component
+    //     author: author,
     //     content: replyText
     //   };
+    //   console.log("reply: ", reply)
+    //   const optimisticReply = { ...reply, id: Date.now() }; // Temporary ID
+    //   setReplies(currentReplies => [...currentReplies, optimisticReply]);
+    //   console.log("currentReplies: ", currentReplies)
+    //   setReplyText("");
 
-    //   const newReply = await postReply(reply);
-    //   if (newReply) {
-    //     setReplies(currentReplies => [...currentReplies, newReply[0]]);
-    //     setReplyText("");
-    //     if (isExpanded) {
-    //       const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
-    //       animateHeight(newHeight);
-    //     }
+    //   const result = await postReply(reply);
+    //   if (result && result.length > 0) {
+    //     // Replace the optimistic reply with the actual data
+    //     setReplies(currentReplies =>
+    //       currentReplies.map(r => (r.id === optimisticReply.id ? result[0] : r))
+    //     );
+    //   } else {
+    //     // If the backend call fails, remove the optimistic reply and notify the user
+    //     setReplies(currentReplies => currentReplies.filter(r => r.id !== optimisticReply.id));
+    //     alert('Failed to post reply');
+    //   }
+
+    //   if (isExpanded) {
+    //     animateHeight(calculateFullHeight());
     //   }
     // };
-
-    const submitReply = async () => {
-      if (!replyText.trim()) return; // Prevent empty replies
-
-      const reply = {
-        comment_id: id,
-        author: author,
-        content: replyText
-      };
-
-      // Optimistically add the reply to the UI
-      const optimisticReply = { ...reply, id: Date.now() }; // Temporary ID
-      setReplies(currentReplies => [...currentReplies, optimisticReply]);
-      setReplyText("");
-      if (isExpanded) {
-        const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
-        animateHeight(newHeight);
-      }
-
-      // Attempt to post the reply
-      const result = await postReply(reply);
-      if (!result) {
-        // Remove optimistic reply if post fails
-        setReplies(currentReplies => currentReplies.filter(r => r.id !== optimisticReply.id));
-        alert('Failed to post reply');
-      } else {
-        // Replace optimistic reply with actual reply data from server
-        setReplies(currentReplies =>
-          currentReplies.map(r => (r.id === optimisticReply.id ? result[0] : r))
-        );
-      }
-    };
 
 
     return (
@@ -337,10 +386,12 @@ const IndividualComment = ({
 
   return (
     <Animated.View style={[styles.biggerContainer, { height }]}>
-      <TouchableOpacity onPress={toggleExpansion}>
+      {/* <TouchableOpacity onPress={toggleExpansion}> */}
+      <TouchableOpacity onPress={() => handleClickComment(id)}>
         <View style={styles.bigContainer}>
           <View style={styles.leftSideContainer}>
-            <TouchableOpacity onPress={toggleExpansion}>
+            {/* <TouchableOpacity onPress={toggleExpansion}> */}
+            <TouchableOpacity onPress={() => handleClickComment(id)}>
               <View style={styles.commentContainer}>
                 <View style={styles.topPart}>
                   <Text style={[styles.author, { color: pickColor }]}>{author}</Text>
