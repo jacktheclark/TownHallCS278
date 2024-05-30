@@ -65,14 +65,14 @@ const IndividualComment = ({
     setIsExpanded(!isExpanded);
   };
 
-  const postReplyAndUpdate = async (newReply) => {
-    const posted = await postReply(newReply);
-    if (posted) {
-      fetchReplies(newReply.comment_id).then(newReplies => {
-        setReplies(newReplies);
-      }).catch(error => console.error('Failed to fetch replies:', error));
-    }
-  };
+  // const postReplyAndUpdate = async (newReply) => {
+  //   const posted = await postReply(newReply);
+  //   if (posted) {
+  //     fetchReplies(newReply.comment_id).then(newReplies => {
+  //       setReplies(newReplies);
+  //     }).catch(error => console.error('Failed to fetch replies:', error));
+  //   }
+  // };
 
   // const handleClickComment = async (commentId) => {
   //   // Toggle expansion state for the comment
@@ -128,47 +128,8 @@ const IndividualComment = ({
       };
 
       const newReply = await postReply(reply);
-      if (newReply) {
-        setReplies(currentReplies => [...currentReplies, newReply[0]]);
-        setReplyText("");
-        if (isExpanded) {
-          const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
-          animateHeight(newHeight);
-        }
-      }
+      toggleExpansion();
     };
-
-    // const submitReply = async () => {
-    //   if (!replyText.trim()) return; // Prevent empty replies
-
-    //   const reply = {
-    //     comment_id: id,
-    //     author: author,
-    //     content: replyText
-    //   };
-    //   console.log("reply: ", reply)
-    //   const optimisticReply = { ...reply, id: Date.now() }; // Temporary ID
-    //   setReplies(currentReplies => [...currentReplies, optimisticReply]);
-    //   console.log("currentReplies: ", currentReplies)
-    //   setReplyText("");
-
-    //   const result = await postReply(reply);
-    //   if (result && result.length > 0) {
-    //     // Replace the optimistic reply with the actual data
-    //     setReplies(currentReplies =>
-    //       currentReplies.map(r => (r.id === optimisticReply.id ? result[0] : r))
-    //     );
-    //   } else {
-    //     // If the backend call fails, remove the optimistic reply and notify the user
-    //     setReplies(currentReplies => currentReplies.filter(r => r.id !== optimisticReply.id));
-    //     alert('Failed to post reply');
-    //   }
-
-    //   if (isExpanded) {
-    //     animateHeight(calculateFullHeight());
-    //   }
-    // };
-
 
     return (
       <View style={styles.replyInputContainer}>
@@ -188,11 +149,24 @@ const IndividualComment = ({
       </View>
     );
   };
+
   useEffect(() => {
     if (isExpanded) {
-      animateHeight(calculateFullHeight());
+      const newHeight = baseHeight + (replies.length * replyHeight) + textInputHeight;
+      animateHeight(newHeight);
     }
   }, [replies]);
+
+  // useEffect(() => {
+  //   if (isExpanded) {
+  //     animateHeight(calculateFullHeight());
+  //   }
+  // }, [replies]);
+
+
+  // useEffect(() => {
+  //   animateHeight(calculateFullHeight());
+  // }, [replies]);
 
   const renderReplies = () => (
     <View>
