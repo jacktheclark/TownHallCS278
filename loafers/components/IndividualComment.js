@@ -33,17 +33,19 @@ const IndividualComment = ({
   const [hasReported, setReported] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [height, setHeight] = useState(new Animated.Value(100));
   const baseHeight = 100; // Base height for the comment itself
   const replyHeight = 53; // Estimated height per reply
   const textInputHeight = 65; // Height of the reply input
-  const [replies, setReplies] = useState([
-    { id: 1, author: "Lebron James", content: "This is a reply." },
-    // { id: 2, author: "John Smith", content: "Another insightful reply!" },
-    { id: 2, author: "Jack Clark", content: "Lebron James" },
-  ]);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [replies, setReplies] = useState([]);
+
+  useEffect(() => {
+    if (isExpanded) {
+      fetchReplies(id).then(setReplies);
+    }
+  }, [id, isExpanded]);
 
   const calculateFullHeight = () => {
     return baseHeight + (replies.length * replyHeight) + textInputHeight;
@@ -66,25 +68,58 @@ const IndividualComment = ({
   const ReplyInput = ({ setReplies }) => {
     const [replyText, setReplyText] = useState("");
 
+    // const submitReply = async () => {
+    //   if (!replyText.trim()) return; // Prevent empty replies
+
+    //   const reply = {
+    //     comment_id: id,
+    //     author: author,  // Assuming author name is passed correctly to the component
+    //     content: replyText
+    //   };
+
+    //   const newReply = await postReply(reply);
+    //   if (newReply) {
+    //     setReplies(currentReplies => [...currentReplies, newReply[0]]);
+    //     setReplyText("");
+    //     if (isExpanded) {
+    //       const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
+    //       animateHeight(newHeight);
+    //     }
+    //   }
+    // };
+
     const submitReply = async () => {
       if (!replyText.trim()) return; // Prevent empty replies
 
       const reply = {
         comment_id: id,
-        author: author,  // Assuming author name is passed correctly to the component
+        author: author,
         content: replyText
       };
 
-      const newReply = await postReply(reply);
-      if (newReply) {
-        setReplies(currentReplies => [...currentReplies, newReply[0]]);
-        setReplyText("");
-        if (isExpanded) {
-          const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
-          animateHeight(newHeight);
-        }
+      // Optimistically add the reply to the UI
+      const optimisticReply = { ...reply, id: Date.now() }; // Temporary ID
+      setReplies(currentReplies => [...currentReplies, optimisticReply]);
+      setReplyText("");
+      if (isExpanded) {
+        const newHeight = baseHeight + ((replies.length + 1) * replyHeight) + textInputHeight;
+        animateHeight(newHeight);
+      }
+
+      // Attempt to post the reply
+      const result = await postReply(reply);
+      if (!result) {
+        // Remove optimistic reply if post fails
+        setReplies(currentReplies => currentReplies.filter(r => r.id !== optimisticReply.id));
+        alert('Failed to post reply');
+      } else {
+        // Replace optimistic reply with actual reply data from server
+        setReplies(currentReplies =>
+          currentReplies.map(r => (r.id === optimisticReply.id ? result[0] : r))
+        );
       }
     };
+
 
     return (
       <View style={styles.replyInputContainer}>
@@ -154,6 +189,7 @@ const IndividualComment = ({
       if (error) {
         console.error('Error fetching user:', error);
       } else if (user) {
+        console.log(user)
         setUserId(user.id);
       }
     };

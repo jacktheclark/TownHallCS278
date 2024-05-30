@@ -31,6 +31,7 @@ const postComment = async (comment) => {
 
 // Function to post a new reply
 const postReply = async (reply) => {
+  console.log("reply: ", reply)
   try {
     const { data, error } = await supabase.from('Replies').insert([reply]);
     if (error) {
@@ -44,7 +45,25 @@ const postReply = async (reply) => {
   }
 };
 
-// Function to fetch replies for a specific comment
+// // Function to fetch replies for a specific comment
+// const fetchReplies = async (commentId) => {
+//   try {
+//     const { data, error } = await supabase
+//       .from('Replies')
+//       .select('*')
+//       .eq('comment_id', commentId);
+
+//     if (error) {
+//       console.error('Error fetching replies:', error);
+//       return null;
+//     }
+//     return data;
+//   } catch (error) {
+//     console.error('Error fetching replies:', error.message);
+//     return null;
+//   }
+// };
+
 const fetchReplies = async (commentId) => {
   try {
     const { data, error } = await supabase
@@ -53,13 +72,12 @@ const fetchReplies = async (commentId) => {
       .eq('comment_id', commentId);
 
     if (error) {
-      console.error('Error fetching replies:', error);
-      return null;
+      throw error;
     }
     return data;
   } catch (error) {
-    console.error('Error fetching replies:', error.message);
-    return null;
+    console.error('Error fetching replies:', error);
+    return [];
   }
 };
 
