@@ -89,6 +89,7 @@ export default function Feed({ navigation, route }) {
               setSpecColor={setSpecColor}
               hasCommented={hasCommented}
             />
+            <Text style={styles.disclaimer}> [average position on the scale of all respondents]</Text>
             <View style={styles.lilContainer}>
               <FilterButtons
                 specColor={specColor}
@@ -191,10 +192,16 @@ const styles = StyleSheet.create({
   testText: {
     marginTop: 100,
     marginBottom: 50,
-    color: "white",
+    // color: "white",
     fontSize: 24,
     fontFamily: FONTS.body,
     color: COLORS.lightaccent,
     textAlign: "left",
   },
+  disclaimer: {
+    fontSize: "12%",
+    fontFamily: FONTS.body,
+    color: COLORS.lightaccent,
+    textAlign: "center",
+  }
 });
