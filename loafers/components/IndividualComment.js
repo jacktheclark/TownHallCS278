@@ -36,7 +36,7 @@ const IndividualComment = ({
   const [replyText, setReplyText] = useState("");
   const [height, setHeight] = useState(new Animated.Value(100));
   const baseHeight = 100; // Base height for the comment itself
-  const replyHeight = 53; // Estimated height per reply
+  const replyHeight = 60; // Estimated height per reply
   const textInputHeight = 65; // Height of the reply input
   const [isExpanded, setIsExpanded] = useState(false);
   const [replies, setReplies] = useState([]);
@@ -121,10 +121,12 @@ const IndividualComment = ({
     const submitReply = async () => {
       if (!replyText.trim()) return; // Prevent empty replies
 
+      let trimmedReplyText = replyText.trim().slice(0, 50); //character length 50
+
       const reply = {
         comment_id: id,
         author: author,  // Assuming author name is passed correctly to the component
-        content: replyText
+        content: trimmedReplyText //trimmed version
       };
 
       const newReply = await postReply(reply);
@@ -488,9 +490,11 @@ const styles = StyleSheet.create({
     padding: 10,
     // borderWidth: 1,
     // borderColor: COLORS.lightaccent,
-    // marginBottom: 5,
+    // marginBottom: -10,
     // marginTop: 5,
     // borderRadius: 10,
+
+
   },
   biggerContainer: {
     flexDirection: "column",
