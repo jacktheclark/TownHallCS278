@@ -81,15 +81,19 @@ export default function Feed({ navigation, route }) {
           ></ImageBackground>
           <View style={styles.bodyContainer}>
             {/* <Text style={styles.testText}>feed screen</Text> */}
-            <DiscussionTopic question={`${question}, ${displayName}?`} />
-            <SliderComponent
-              spectrumValue={spectrumValue}
-              setSpectrumValue={setSpectrumValue}
-              specColor={specColor}
-              setSpecColor={setSpecColor}
-              hasCommented={hasCommented}
-            />
-            <Text style={styles.disclaimer}> [average position on the scale of all respondents]</Text>
+            <View style={styles.questionContainer}>
+              <DiscussionTopic question={`${question}, ${displayName}?`} />
+            </View>
+            <View style={styles.sliderContainer}>
+              <SliderComponent
+                spectrumValue={spectrumValue}
+                setSpectrumValue={setSpectrumValue}
+                specColor={specColor}
+                setSpecColor={setSpecColor}
+                hasCommented={hasCommented}
+                avgSpectrum={avgSpectrum}
+              />
+            </View>
             <View style={styles.lilContainer}>
               <FilterButtons
                 specColor={specColor}
@@ -185,6 +189,15 @@ const styles = StyleSheet.create({
     height: "90%",
     padding: "5%",
     // textAlign: 'left',
+  },
+  questionContainer: {
+    // marginBottom: 10,
+    // backgroundColor: 'white',
+  },
+  sliderContainer: {
+    marginBottom: '0%',
+    height: '13%',
+    // backgroundColor: 'orange',
   },
   lilContainer: {
     flex: 1,
