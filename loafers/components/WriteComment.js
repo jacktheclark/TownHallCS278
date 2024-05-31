@@ -61,7 +61,7 @@ const WriteComment = ({
   };
 
   const handleSubmit = async () => {
-    getAggregate().then((avg) => setSpectrumValue(avg));
+    getAggregate().then((avg) => setAvgSpectrum(avg));
     const newComment = {
       spectrum: spectrumValue,
       author: user ? "Anonymous" : displayName, //NOT WORKING YET

@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   container: {
     // borderRadius: 8,
     width: "100%",
-    padding: "10%",
-    marginBottom: "10%",
+    padding: "8%",
+    marginBottom: "0%",
     // backgroundColor: COLORS.white,
     shadowOffset: {
       width: 0,
