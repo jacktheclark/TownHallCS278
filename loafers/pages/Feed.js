@@ -205,10 +205,16 @@ const styles = StyleSheet.create({
   testText: {
     marginTop: 100,
     marginBottom: 50,
-    color: "white",
+    // color: "white",
     fontSize: 24,
     fontFamily: FONTS.body,
     color: COLORS.lightaccent,
     textAlign: "left",
   },
+  disclaimer: {
+    fontSize: "12%",
+    fontFamily: FONTS.body,
+    color: COLORS.lightaccent,
+    textAlign: "center",
+  }
 });
