@@ -4,7 +4,7 @@ import Comment from "./IndividualComment.js";
 import { COLORS, FONTS } from "../constants.js";
 import { supabase, postComment } from "../Supabase.js";
 
-const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
+const CommentsFeedHot = ({ displayName, comments, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [commentList, setCommentList] = useState([]);
   const [userId, setUserId] = useState(null);
@@ -128,6 +128,7 @@ const CommentsFeedHot = ({ comments, specColor, setSpecColor }) => {
         data={commentList || []}
         renderItem={({ item }) => (
           <Comment
+            displayName={displayName}
             spec={item.spectrum}
             author={item.author}
             id={item.id}

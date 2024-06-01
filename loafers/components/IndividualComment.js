@@ -16,6 +16,7 @@ import { supabase, fetchReplies, postReply } from "../Supabase.js"; // Adjust pa
 
 
 const IndividualComment = ({
+  displayName,
   spec,
   author,
   id,
@@ -125,7 +126,7 @@ const IndividualComment = ({
 
       const reply = {
         comment_id: id,
-        author: author,  // Assuming author name is passed correctly to the component
+        author: displayName,  // Assuming author name is passed correctly to the component
         content: trimmedReplyText //trimmed version
       };
 

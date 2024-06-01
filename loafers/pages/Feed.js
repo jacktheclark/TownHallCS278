@@ -103,22 +103,26 @@ export default function Feed({ navigation, route }) {
               />
               {sortOption === "New" ? (
                 <CommentsFeedNew
+                  displayName={displayName}
                   specColor={specColor}
                   setSpecColor={setSpecColor}
                 />
               ) : sortOption === "Hot" ? (
                 <CommentsFeedHot
+                  displayName={displayName}
                   specColor={specColor}
                   setSpecColor={setSpecColor}
                 />
               ) : sortOption === "Similar" ? (
                 <CommentsFeedSimilar
+                  displayName={displayName}
                   specValue={spectrumValue}
                   specColor={specColor}
                   setSpecColor={setSpecColor}
                 />
               ) : (
                 <CommentsFeedDis
+                  displayName={displayName}
                   specValue={spectrumValue}
                   specColor={specColor}
                   setSpecColor={setSpecColor}

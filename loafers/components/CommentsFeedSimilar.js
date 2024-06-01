@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet } from "react-native";
 import Comment from "./IndividualComment.js";
 import { supabase, postComment } from "../Supabase.js";
 
-const CommentsFeedSimilar = ({ specValue, specColor, setSpecColor }) => {
+const CommentsFeedSimilar = ({ displayName, specValue, specColor, setSpecColor }) => {
   const [fetchError, setFetchError] = useState(null);
   const [commentList, setCommentList] = useState([]);
   const [userId, setUserId] = useState(null);
@@ -136,6 +136,7 @@ const CommentsFeedSimilar = ({ specValue, specColor, setSpecColor }) => {
         data={commentList || []}
         renderItem={({ item }) => (
           <Comment
+            displayName={displayName}
             spec={item.spectrum}
             author={item.author}
             id={item.id}
